@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 import collections
 import math
+from scipy import spatial
 
 def insert(filename, tablename):
     with open(filename, encoding="utf8") as f:
@@ -39,7 +40,8 @@ def findModelVal(desc, u, model):
     for udesc in u['Desc']:
         if desc['Term'] == udesc['Term']:
             return (int(desc[model])-int(udesc[model])) * (int(desc[model])-int(udesc[model]))
-    return (int(desc[model])) * (int(desc[model]))
+    #return (int(desc[model])) * (int(desc[model]))
+    return 0
 
 def prettyPrint(m, model):
 
@@ -74,10 +76,10 @@ def main():
     db = client['mwdb']
     table = db['users']
     model = 'DF'
-    K = 4;
+    K = 4
     user = table.find_one({'Id': '39052554@N00'})
 
-    maxVal = 0;
+    maxVal = 0
     for desc in user['Desc']:
         maxVal = maxVal + (int(desc[model])) * (int(desc[model]))
 
@@ -87,22 +89,55 @@ def main():
         res = {}
         val = 0
         if user['Id'] != u['Id']:
-            for desc in user['Desc']:
-                val = val + findModelVal(desc, u, model)
 
-            if val < maxVal:
-                res['Distance'] = math.sqrt(val)
-                res['User'] = u
-                result.append(res)
+            a1 = []
+            a2 = []
+
+            #n = max(len(user['Desc'], len(u['User']['Desc'])))
+            i = 0
+            j = 0
+
+            while i < len(user['Desc']) and j < len(u['Desc']):
+                if(user['Desc'][i]['Term'] == u['Desc'][j]['Term']):
+                    a1.append(int(user['Desc'][i][model]))
+                    a2.append(int(u['Desc'][j][model]))
+                    i = i+1
+                    j = j+1
+                elif user['Desc'][i]['Term'] < u['Desc'][j]['Term']:
+                    a1.append(int(user['Desc'][i][model]))
+                    a2.append(0)
+                    i = i+1
+                else:
+                    a1.append(0)
+                    a2.append(int(u['Desc'][j][model]))
+                    j = j+1
+
+            while i < len(user['Desc']):
+                a1.append(int(user['Desc'][i][model]))
+                a2.append(0)
+                i = i + 1
+
+            while j < len(u['Desc']):
+                a1.append(0)
+                a2.append(int(u['Desc'][j][model]))
+                j = j + 1
+
+            #for desc in user['Desc']:
+            #    val = val + findModelVal(desc, u, model)
+            val = 1 - spatial.distance.cosine(a1, a2)
+            #if val < maxVal:
+            res['Distance'] = math.sqrt(val)
+            res['User'] = u
+            result.append(res)
 
 
-    newlist = sorted(result, key=lambda k: k['Distance'])
+    newlist = sorted(result, key=lambda k: k['Distance'], reverse=True)
 
     i = 0
 
     prettyPrint(user, model)
 
-    while i < K:
+    while i < K and i < len(newlist):
         prettyPrint1(user, newlist[i], model)
         i = i+1
 
