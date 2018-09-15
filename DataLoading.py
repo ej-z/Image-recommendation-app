@@ -6,6 +6,10 @@ import xml.etree.ElementTree as ET
 
 class DataLoading:
 
+    def drop_database(self):
+        client = MongoClient('localhost', 27017)
+        client.drop_database('mwdb')
+
     def insert_textual_data(self, filename, tablename):
         with open(filename, encoding="utf8") as f:
             lines = f.readlines()

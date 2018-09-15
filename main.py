@@ -1,333 +1,105 @@
 from pymongo import MongoClient
+import tasks
 import collections
 import math
 from scipy import spatial
 from sklearn import metrics
 import numpy as np
 from DataLoading import DataLoading
+from os import system
 
 
-def findModelVal(desc, u, model):
-    for udesc in u['Desc']:
-        if desc['Term'] == udesc['Term']:
-            return (int(desc[model])-int(udesc[model])) * (int(desc[model])-int(udesc[model]))
-    #return (int(desc[model])) * (int(desc[model]))
-    return 0
+def print_menu():
+    print('1. Task 1')
+    print('2. Task 2')
+    print('3. Task 3')
+    print('4. Task 4')
+    print('5. Task 5')
+    print('6. Load data')
+    print('7. Sample input')
+    print('8. Quit')
 
-def prettyPrint(m, model):
-
-    print('Id : '+m['Id'])
-    print('Model : '+model)
+def sample_run():
+    print('Task 1-----------------')
+    tasks.task1_3('usertext', '39052554@N00', 'TF', 5)
+    print('Task 1-----------------')
+    tasks.task1_3('usertext', '56087830@N00', 'DF', 8)
+    print('Task 1-----------------')
+    tasks.task1_3('usertext', '56087830@N00', 'TF-IDF', 5)
     print()
-    for desc in m['Desc']:
-        print(desc['Term'] + ' : ' + desc[model])
-    print('Total terms : ' + str(len(m['Desc'])))
-    print('--------------------------------------')
-    print('--------------------------------------')
+    print('Task 2-----------------')
+    tasks.task1_3('imagetext', '4459178306', 'TF', 10)
+    print('Task 2-----------------')
+    tasks.task1_3('imagetext', '288051306', 'DF', 5)
+    print('Task 2-----------------')
+    tasks.task1_3('imagetext', '288051306', 'TF-IDF', 5)
     print()
-
-def prettyPrint1(m,mm, model):
-    m1 = mm['User']
-    print('Id : ' + m1['Id'])
-    print('Distance : ' + str(mm['Distance']))
-    print('Model : ' + model)
+    print('Task 3-----------------')
+    tasks.task1_3('loctext', '27', 'TF', 5)
+    print('Task 3-----------------')
+    tasks.task1_3('loctext', '6', 'DF', 5)
+    print('Task 3-----------------')
+    tasks.task1_3('loctext', '6', 'TF-IDF', 7)
     print()
-    for desc in m['Desc']:
-        for desc1 in m1['Desc']:
-            if desc['Term'] == desc1['Term']:
-                print(desc1['Term'] + ' : ' + desc1[model])
-    print('Total terms : '+str(len(m1['Desc'])))
-    print('--------------------------------------')
-
-def task1_3(tb, id, model, k):
-
-    # insert_data()
-
-    client = MongoClient('localhost', 27017)
-    db = client['mwdb']
-    table = db[tb]
-    src = table.find_one({'id': id})
-
-    maxVal = 0
-    for desc in src['desc']:
-        maxVal = maxVal + (float(desc[model])) * (float(desc[model]))
-
-    result = []
-    for s in table.find({}):
-
-        res = {}
-        val = 0
-        if src['id'] != s['id']:
-
-            terms = []
-            a1 = []
-            a2 = []
-
-            # n = max(len(user['Desc'], len(u['User']['Desc'])))
-            i = 0
-            j = 0
-
-            while i < len(src['desc']) and j < len(s['desc']):
-                if (src['desc'][i]['term'] == s['desc'][j]['term']):
-                    terms.append(src['desc'][i]['term'])
-                    a1.append(float(src['desc'][i][model]))
-                    a2.append(float(s['desc'][j][model]))
-                    i = i + 1
-                    j = j + 1
-                elif src['desc'][i]['term'] < s['desc'][j]['term']:
-                    terms.append(src['desc'][i]['term'])
-                    a1.append(float(src['desc'][i][model]))
-                    a2.append(0)
-                    i = i + 1
-                else:
-                    terms.append(s['desc'][j]['term'])
-                    a1.append(0)
-                    a2.append(float(s['desc'][j][model]))
-                    j = j + 1
-
-            while i < len(src['desc']):
-                terms.append(src['desc'][i]['term'])
-                a1.append(float(src['desc'][i][model]))
-                a2.append(0)
-                i = i + 1
-
-            while j < len(s['desc']):
-                terms.append(s['desc'][j]['term'])
-                a1.append(0)
-                a2.append(float(s['desc'][j][model]))
-                j = j + 1
-
-            val = 1 - spatial.distance.cosine(a1, a2)
-            res['distance'] = math.sqrt(val)
-            res['id'] = s['id']
-            res['s'] = a1
-            res['t'] = a2
-            res['terms'] = terms
-            result.append(res)
-
-    newlist = sorted(result, key=lambda k: k['distance'], reverse=True)
-
-    print('id : ' + src['id'] + "   model :" + model + "    k :" + str(k))
-    n = 0
-    print('Top 3 contributors (euclidean distance)')
+    print('Task 4-----------------')
+    tasks.task4('10', 'CN3x3', 7)
+    print('Task 4-----------------')
+    tasks.task4('18', 'GLRLM', 5)
+    print('Task 4-----------------')
+    tasks.task4('30', 'LBP3x3', 5)
     print()
-    while n < k and n < len(newlist):
-        print('id : '+str(newlist[n]['id']) + " - "+ str(newlist[n]['distance']))
-        top3 = top3_textual_matches(newlist[n]['s'], newlist[n]['t'])
-        for t in top3:
-            print(newlist[n]['terms'][t['i']]+':'+str(t['d']))
-        print()
-        n = n + 1
+    print('Task 5-----------------')
+    tasks.task5('4', 5)
 
 def main():
 
-    # insert_data()
-
-    client = MongoClient('localhost', 27017)
-
-
-def top3_textual_matches(s_mat, t_mat):
-
-    res = []
-    n = len(s_mat)
-
-    for i in range(0,n):
-        d = abs(s_mat[i] - t_mat[i])
-        if len(res) < 3 and not(math.isnan(d)):
-            res.append({'i': i, 'd': d})
-        else:
-            k = -1
-            min = 100000000
-            l = 0
-            for r in res:
-                if r['d'] < min:
-                    min = r['d']
-                    k = l
-                l = l + 1
-            if k > -1 and min > d and not(math.isnan(d)):
-                res[k] = {'i': i, 'd': d}
-
-    return res
-
-def task4(id, model, k):
-    client = MongoClient('localhost', 27017)
-    db = client['mwdb']
-    locations = db['locations']
-    loc = locations.find_one({'id': id})
-
-    s_loc = db[loc['title']]
-    s_data = s_loc.find_one({'model': model})['data']
-
-
-    distances = []
-
-    s_mat = []
-    s_img = []
-
-    for s_d in s_data:
-        s_mat.append(s_d[1:])
-        s_img.append(s_d[0])
-
-    for l in locations.find({'id': {'$ne': id}}):
-        t_loc = db[l['title']]
-        t_data = t_loc.find_one({'model': model})['data']
-        t_mat = []
-        t_img = []
-        for t_d in t_data:
-            t_mat.append(t_d[1:])
-            t_img.append(t_d[0])
-
-        r_mat = metrics.pairwise.euclidean_distances(s_mat, t_mat)
-        top_3 = top3_pairwise_matches(r_mat)
-        r_avg = r_mat.mean()
-        r_img = []
-        for t in top_3:
-            r_img.append({'src': s_img[t['i']], 'tgt': t_img[t['j']], 'd': t['d']})
-
-        distances.append({'id':l['id'],'title':l['title'],'distance':r_avg,'top':r_img})
-
-    x = 0
-
-    print(str(id)+':'+str(loc['title'])+"    model - "+model+"    k - "+str(k))
-    print()
-    for di in sorted(distances, key=lambda k: k['distance']):
-        print(str(di['id']) + ':' + str(di['title']) + " - " + str(di['distance']))
-        print('Top 3 contributing images')
-        for t in di['top']:
-            print(str(t['src']) + ':' + str(t['tgt']) + " - " + str(t['d']))
-        print()
-        print()
-        x = x + 1
-        if x >= k:
+    while True:
+        print_menu()
+        option = input("Enter option: ")
+        if option == '1':
+            print('TASK 1')
+            inp = input("Input: ")
+            ips = inp.split(' ')
+            tasks.task1_3('usertext', ips[0], ips[1], int(ips[2]))
+        elif option == '2':
+            print('TASK 2')
+            inp = input("Input: ")
+            ips = inp.split(' ')
+            tasks.task1_3('imagetext', ips[0], ips[1], int(ips[2]))
+        elif option == '3':
+            print('TASK 3')
+            inp = input("Input: ")
+            ips = inp.split(' ')
+            tasks.task1_3('loctext', ips[0], ips[1], int(ips[2]))
+        elif option == '4':
+            print('TASK 4')
+            inp = input("Input: ")
+            ips = inp.split(' ')
+            tasks.task4(ips[0], ips[1], int(ips[2]))
+        elif option == '5':
+            print('TASK 5')
+            inp = input("Input: ")
+            ips = inp.split(' ')
+            tasks.task5(ips[0], int(ips[1]))
+        elif option == '6':
+            print('Load Data')
+            path = input("Path: ")
+            dt = DataLoading(path)
+            dt.drop_database()
+            dt.process_location_data()
+            dt.process_users_textual_data()
+            dt.process_images_textual_data()
+            dt.process_locations_textual_data()
+            dt.process_visual_data()
+        elif option == '7':
+            sample_run()
+        elif option == '8':
             break
-
-def top3_pairwise_matches(r_mat):
-
-    res = []
-    n = len(r_mat)
-    m = len(r_mat[0])
-
-    for i in range(0,n):
-        for j in range(0,m):
-            if len(res) < 3:
-                res.append({'i': i, 'j': j, 'd': r_mat[i][j]})
-            else:
-                k = -1
-                max = -1
-                l = 0
-                for r in res:
-                    if r['d'] > max:
-                        max = r['d']
-                        k = l
-                    l = l + 1
-                if k > -1 and max > r_mat[i][j]:
-                    res[k] = {'i': i, 'j': j, 'd': r_mat[i][j]}
-
-    return res
-
-def task5(id, k):
-    client = MongoClient('localhost', 27017)
-    db = client['mwdb']
-    locations = db['locations']
-    loc = locations.find_one({'id': id})
-
-    s_loc = db[loc['title']]
-
-    models = ['CM', 'CM3x3', 'CN', 'CN3x3', 'CN3x3', 'GLRLM', 'GLRLM3x3', 'HOG', 'LBP', 'LBP3x3']
-    first = 0
-    distances = []
-    for model in models:
-        s_data = s_loc.find_one({'model': model})['data']
-
-        s_mat = []
-        s_img = []
-
-        for s_d in s_data:
-            s_mat.append(s_d[1:])
-            s_img.append(s_d[0])
-
-
-        n = 0
-        for l in locations.find({'id': {'$ne': id}}):
-            t_loc = db[l['title']]
-            t_data = t_loc.find_one({'model': model})['data']
-            t_mat = []
-            t_img = []
-            for t_d in t_data:
-                t_mat.append(t_d[1:])
-                t_img.append(t_d[0])
-
-            r_mat = metrics.pairwise.euclidean_distances(s_mat, t_mat)
-            r_avg = r_mat.mean()
-
-
-
-            if first == 0:
-                r_dist = []
-                r_dist.append(r_avg)
-                distances.append({'id':l['id'],'title':l['title'],'distances':r_dist})
-            else:
-                distances[n]['distances'].append(r_avg)
-
-            n = n + 1
-        first = 1
-
-    for d in distances:
-        avg = sum(d['distances']) / float(len(d['distances']))
-        d['avg'] = avg
-
-    x = 0
-    print(str(id)+':'+str(loc['title'])+"    model - "+model+"    k - "+str(k))
-    print()
-    for di in sorted(distances, key=lambda k: k['avg']):
-        print(str(di['id']) + ':' + str(di['title']) + " - " + str(di['avg']))
-        print('Contributions')
-        for i in range(0,len(models)):
-            print(str(models[i]) + ' - ' + str(di['distances'][i]))
-        print()
-        print()
-        x = x + 1
-        if x >= k:
-           break
+        else:
+            print('Incorrect option.')
+        input('Press any key to continue...')
+        _ = system('cls')
 
 if __name__ == "__main__":
 
-    print('Task 1-----------------')
-    task1_3('usertext', '39052554@N00', 'TF', 5)
-    print('Task 1-----------------')
-    task1_3('usertext', '56087830@N00', 'DF', 8)
-    print('Task 1-----------------')
-    task1_3('usertext', '56087830@N00', 'TF-IDF', 5)
-    print()
-    print('Task 2-----------------')
-    task1_3('imagetext', '4459178306', 'TF', 10)
-    print('Task 2-----------------')
-    task1_3('imagetext', '288051306', 'DF', 5)
-    print('Task 2-----------------')
-    task1_3('imagetext', '288051306', 'TF-IDF', 5)
-    print()
-    print('Task 3-----------------')
-    task1_3('loctext', '27', 'TF', 5)
-    print('Task 3-----------------')
-    task1_3('loctext', '6', 'DF', 5)
-    print('Task 3-----------------')
-    task1_3('loctext', '6', 'TF-IDF', 7)
-    print()
-    print('Task 4-----------------')
-    task4('10', 'CN3x3', 7)
-    print('Task 4-----------------')
-    task4('18', 'GLRLM', 5)
-    print('Task 4-----------------')
-    task4('30', 'LBP3x3', 5)
-    print()
-    print('Task 5-----------------')
-    task5('4', 5)
-    #task4('10', 'CN3x3', 2)
-    #task5('10', 4)
-    #dt = DataLoading('E:\Studies\MWDB\project')
-    #dt.process_users_textual_data()
-    #dt.process_images_textual_data()
-    #dt.process_locations_textual_data()
-    #a = spatial.distance.mahalanobis([ ])
-
-    #main()
+    main()
