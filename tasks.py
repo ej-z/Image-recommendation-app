@@ -63,7 +63,7 @@ def task1_3(tb, id, model, k):
                 j = j + 1
 
             val = 1 - spatial.distance.cosine(a1, a2)
-            res['distance'] = math.sqrt(val)
+            res['distance'] = val
             res['id'] = s['id']
             res['s'] = a1
             res['t'] = a2
@@ -89,7 +89,10 @@ def top3_textual_matches(s_mat, t_mat):
     res = []
     n = len(s_mat)
 
-    for i in range(0,n):
+    for i in range(0, n):
+        if s_mat[i] == 0 or t_mat[i] == 0:
+            continue
+
         d = abs(s_mat[i] - t_mat[i])
         if len(res) < 3 and not(math.isnan(d)):
             res.append({'i': i, 'd': d})
@@ -105,6 +108,29 @@ def top3_textual_matches(s_mat, t_mat):
             if k > -1 and min > d and not(math.isnan(d)):
                 res[k] = {'i': i, 'd': d}
 
+    if len(res) < 3:
+        res1 = []
+        m = 3 - len(res)
+        for i in range(0, n):
+            if s_mat[i] != 0 and t_mat[i] != 0:
+                continue
+
+            d = abs(s_mat[i] - t_mat[i])
+            if len(res1) < m and not (math.isnan(d)):
+                res1.append({'i': i, 'd': d})
+            else:
+                k = -1
+                min = 100000000
+                l = 0
+                for r in res1:
+                    if r['d'] < min:
+                        min = r['d']
+                        k = l
+                    l = l + 1
+                if k > -1 and min > d and not (math.isnan(d)):
+                    res1[k] = {'i': i, 'd': d}
+        for i in range(0, m):
+            res.append(res1[i])
     return res
 
 def task4(id, model, k):
