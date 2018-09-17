@@ -74,11 +74,11 @@ def task1_3(tb, id, model, k):
 
     print('id : ' + src['id'] + "   model :" + model + "    k :" + str(k))
     n = 0
-    print('Top 3 contributors (euclidean distance)')
     print()
     while n < k and n < len(newlist):
         print('id : '+str(newlist[n]['id']) + " - "+ str(newlist[n]['distance']))
         top3 = top3_textual_matches(newlist[n]['s'], newlist[n]['t'])
+        print('Top 3 contributors (euclidean distance)')
         for t in top3:
             print(newlist[n]['terms'][t['i']]+':'+str(t['d']))
         print()
@@ -261,7 +261,7 @@ def task5(id, k):
         d['avg'] = avg
 
     x = 0
-    print(str(id)+':'+str(loc['title'])+"    model - "+model+"    k - "+str(k))
+    print(str(id)+':'+str(loc['title'])+"    k - "+str(k))
     print()
     for di in sorted(distances, key=lambda k: k['avg']):
         print(str(di['id']) + ':' + str(di['title']) + " - " + str(di['avg']))
