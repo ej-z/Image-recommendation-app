@@ -5,7 +5,7 @@ import math
 from scipy import spatial
 from sklearn import metrics
 import numpy as np
-from DataLoading import DataLoading
+from data_loading import DataLoading
 from os import system
 
 

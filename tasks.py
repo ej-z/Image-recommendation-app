@@ -2,6 +2,7 @@ from pymongo import MongoClient
 import math
 from scipy import spatial
 from sklearn import metrics
+from sorted_list import sorted_list
 
 
 def task1_3(tb, id, model, k):
@@ -17,7 +18,7 @@ def task1_3(tb, id, model, k):
     for desc in src['desc']:
         maxVal = maxVal + (float(desc[model])) * (float(desc[model]))
 
-    result = []
+    result = sorted_list(k, 'distance', False)
     for s in table.find({}):
 
         res = {}
@@ -68,19 +69,20 @@ def task1_3(tb, id, model, k):
             res['s'] = a1
             res['t'] = a2
             res['terms'] = terms
-            result.append(res)
+            result.add(res)
 
-    newlist = sorted(result, key=lambda k: k['distance'], reverse=True)
+    #newlist = sorted(result, key=lambda k: k['distance'], reverse=True)
 
     print('id : ' + src['id'] + "   model :" + model + "    k :" + str(k))
     n = 0
     print()
-    while n < k and n < len(newlist):
-        print('id : '+str(newlist[n]['id']) + " - "+ str(newlist[n]['distance']))
-        top3 = top3_textual_matches(newlist[n]['s'], newlist[n]['t'])
-        print('Top 3 contributors (euclidean distance)')
+    while n < k:
+        element = result.extract()
+        print('id : '+str(element['id']) + " - "+ str(element['distance']))
+        top3 = top3_textual_matches(element['s'], element['t'])
+        print('Top 3 contributors (absolute distance)')
         for t in top3:
-            print(newlist[n]['terms'][t['i']]+':'+str(t['d']))
+            print(element['terms'][t['i']]+':'+str(t['d']))
         print()
         n = n + 1
 
@@ -142,8 +144,7 @@ def task4(id, model, k):
     s_loc = db[loc['title']]
     s_data = s_loc.find_one({'model': model})['data']
 
-
-    distances = []
+    distances = sorted_list(k, 'distance', True)
 
     s_mat = []
     s_img = []
@@ -168,13 +169,14 @@ def task4(id, model, k):
         for t in top_3:
             r_img.append({'src': s_img[t['i']], 'tgt': t_img[t['j']], 'd': t['d']})
 
-        distances.append({'id':l['id'],'title':l['title'],'distance':r_avg,'top':r_img})
+        distances.add({'id': l['id'], 'title': l['title'], 'distance': r_avg, 'top': r_img})
 
     x = 0
 
     print(str(id)+':'+str(loc['title'])+"    model - "+model+"    k - "+str(k))
     print()
-    for di in sorted(distances, key=lambda k: k['distance']):
+    while x < k:
+        di = distances.extract()
         print(str(di['id']) + ':' + str(di['title']) + " - " + str(di['distance']))
         print('Top 3 contributing images')
         for t in di['top']:
@@ -182,8 +184,6 @@ def task4(id, model, k):
         print()
         print()
         x = x + 1
-        if x >= k:
-            break
 
 def top3_pairwise_matches(r_mat):
 
