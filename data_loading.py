@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 class DataLoading:
 
     def drop_database(self):
-        client = MongoClient('localhost', 27017)
+        client = MongoClient('localhost', 27017) 
         client.drop_database('mwdb')
 
     def insert_textual_data(self, filename, tablename):
@@ -76,17 +76,17 @@ class DataLoading:
     def process_users_textual_data(self):
 
         #insert usertext
-        self.insert_textual_data(self.path+'\desctxt\desctxt\devset_textTermsPerUser.txt', 'usertext')
+        self.insert_textual_data(self.path+'\desctxt\devset_textTermsPerUser.txt', 'usertext')
 
     def process_images_textual_data(self):
 
         #insert imagetext
-        self.insert_textual_data(self.path+'\desctxt\desctxt\devset_textTermsPerImage.txt', 'imagetext')
+        self.insert_textual_data(self.path+'\desctxt\devset_textTermsPerImage.txt', 'imagetext')
 
     def process_locations_textual_data(self):
 
         #insert loctexts
-        self.insert_location_textual_data(self.path+'\desctxt\desctxt\devset_textTermsPerPOI.txt', 'loctext')
+        self.insert_location_textual_data(self.path+'\desctxt\devset_textTermsPerPOI.txt', 'loctext')
 
     def process_location_data(self):
 
@@ -126,7 +126,7 @@ class DataLoading:
             for m in models:
                 model = {}
                 arr = []
-                filename = self.path + '\descvis\descvis\img\\'+l['title']+' '+m+'.csv'
+                filename = self.path + '\descvis\img\\'+l['title']+' '+m+'.csv'
                 with open(filename, encoding="utf8") as f:
                     reader = csv.reader(f, quoting=csv.QUOTE_NONNUMERIC)  # change contents to floats
                     for row in reader:  # each row is a list
