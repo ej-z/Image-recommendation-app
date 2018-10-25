@@ -1,0 +1,112 @@
+from pymongo import MongoClient
+from decomposition_algorithms import Decomposition
+from scipy import spatial
+import numpy as np
+from sklearn import metrics
+from sorted_list import sorted_list
+import operator
+
+'''
+: Implement a program which, given a visual descriptor model (CM, CM3x3, CN, CN3x3,CSD,GLRLM, GLRLM3x3,
+HOG,LBP, LBP3x3) and value “k”,
+– first identifies (and lists) k latent semantics
+'''
+class Task_3_4:
+    def __decompose(self, table_name, model, algorithm, k):
+
+        client = MongoClient('localhost', 27017)
+        db = client['mwdb']
+        locations_table = db[table_name].find({})
+        self.locations = {}
+        data = []
+        count = 0
+        for loc in locations_table:
+            each_loc_table = db[loc['title']].find({"model":model})[0]
+            data.extend(each_loc_table["data"])
+            new_loc_size = len(each_loc_table["data"])
+            self.locations[loc['id']] = (count, count+new_loc_size)
+            count+=new_loc_size
+        self.images_with_id = np.array(data)
+        self.images_with_id = self.images_with_id.astype(np.float)
+        self.images_id = self.images_with_id[:, 0].transpose()
+        self.images = self.images_with_id[:, 1:]
+        self.decomposition = Decomposition(self.images, k, algorithm, [], True)
+
+
+
+    def task3(self, table_name, model, algorithm, k, id):
+        self.__decompose(table_name, model, algorithm, k)
+        print('Variance captured by top ' + str(k) + ' latent semantics: ' + str(self.decomposition.variance))
+        given_image_index = self.images_id.tolist().index(float(id))
+        print(given_image_index)
+        print(self.images_with_id[given_image_index][0])
+        for i in range(0, k):
+            print()
+            print()
+            print('Latent semantic '+str(i+1))
+            print(self.decomposition.loading_scores[i])
+        #decompose
+        print(len(self.images_id))
+        print(len(self.decomposition.decomposed_data))
+
+        s_mat = [self.decomposition.decomposed_data[given_image_index]]
+
+        distances = sorted_list(5, 'distance', True)
+
+        euc_distance = metrics.euclidean_distances(s_mat,self.decomposition.decomposed_data)
+        #euc_distance = metrics.euclidean_distances([self.images[given_image_index]],self.images)
+        for i in range(0, len(self.images_id)):
+            distances.add({'id': self.images_id[i], 'distance': euc_distance[0][i]})
+
+        print('Top 5 similar objects in terms of image Id - Euclidean distance')
+        print()
+        for i in range(0,5):
+            o = distances.extract()
+            print(str(o['id'])+' - '+str(o['distance']))
+
+        distances_loc = sorted_list(5, 'distance', True)
+        # in terms of location
+        #[('<loc_id>', (1, 2)), ('<loc_id>', (3, 2))]
+        locations_sorted = sorted(self.locations.items(), key=operator.itemgetter(1))
+        for i in range(0,len(locations_sorted)):
+            start_index = locations_sorted[i][1][0]
+            end_index = locations_sorted[i][1][1]
+            sum = 0.0
+            for j in range(start_index, end_index):
+                sum = sum + euc_distance[0][j]
+            distances_loc.add({'id': locations_sorted[i][0], 'distance': sum/(end_index-start_index)})
+
+        print('Top 5 similar objects in terms of location Id - Euclidean distance')
+        print()
+        for i in range(0,5):
+            o = distances_loc.extract()
+            print(str(o['id'])+' - '+str(o['distance']))
+
+    def task4(self, table_name, model, algorithm, k, id):
+        self.__decompose(table_name, model, algorithm, k)
+        print('Variance captured by top ' + str(k) + ' latent semantics: ' + str(self.decomposition.variance))
+        for i in range(0, k):
+            print()
+            print()
+            print('Latent semantic '+str(i+1))
+            print(self.decomposition.loading_scores[i])
+        #decompose
+
+        print(self.decomposition.decomposed_data.shape)
+        s_mat = self.decomposition.decomposed_data[self.locations[id][0]:self.locations[id][1],:]
+        print(s_mat.shape)
+        print("hello",self.locations[id][0],self.locations[id][1])
+        distances = sorted_list(5, 'distance', True)
+
+        for location_id, ranges in self.locations.items():
+            euc_distance = metrics.euclidean_distances(s_mat,self.decomposition.decomposed_data[ranges[0]:ranges[1],:])
+            distances.add({'id': location_id, 'distance': np.mean(euc_distance)})
+
+        print('Top 5 similar locations in terms of Euclidean distance')
+        print()
+        for i in range(0,5):
+            o = distances.extract()
+            print(str(o['id'])+' - '+str(o['distance']))
+
+
+

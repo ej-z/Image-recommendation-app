@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from task_1_2 import Task_1_2
+from task_3_4 import Task_3_4
 import collections
 import math
 from scipy import spatial
@@ -72,14 +73,16 @@ def main():
             tasks.task2(ips[0], ips[1], ips[2], int(ips[3]), ips[4])
         elif option == '3':
             print('TASK 3')
-            inp = input("Input: ")
+            inp = input("Input: locations CM PCA 5 10045579766")
             ips = inp.split(' ')
-            #tasks.task1_3('loctext', ips[0], ips[1], int(ips[2]))
+            tasks = Task_3_4()
+            tasks.task3(ips[0], ips[1], ips[2], int(ips[3]), ips[4])
         elif option == '4':
             print('TASK 4')
-            inp = input("Input: ")
+            inp = input("Input: locations CM PCA 5 1")
             ips = inp.split(' ')
-            #tasks.task4(ips[0], ips[1], int(ips[2]))
+            tasks = Task_3_4()
+            tasks.task4(ips[0], ips[1], ips[2], int(ips[3]), ips[4])
         elif option == '5':
             print('TASK 5')
             inp = input("Input: ")

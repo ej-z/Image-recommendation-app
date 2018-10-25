@@ -115,7 +115,7 @@ class DataLoading:
 
     def process_visual_data(self):
 
-        models = ['CM', 'CM3x3', 'CN', 'CN3x3', 'CN3x3', 'GLRLM', 'GLRLM3x3', 'HOG', 'LBP', 'LBP3x3']
+        models = ['CM', 'CM3x3', 'CN', 'CN3x3', 'CSD', 'GLRLM', 'GLRLM3x3', 'HOG', 'LBP', 'LBP3x3']
 
         client = MongoClient('localhost', 27017)
         db = client['mwdb']

@@ -1,0 +1,6 @@
+scipy
+pymongo
+numpy
+sklearn
+requests
+operator
