@@ -16,10 +16,8 @@ class Decomposition:
             _data = StandardScaler().fit_transform(data)
         if algorithm == 'PCA':
             model = PCA(n_components=k, svd_solver='arpack')
-            self.variance = model.explained_variance_ratio_
         elif algorithm == 'SVD':
             model = TruncatedSVD(n_components=k, algorithm='arpack')
-            self.variance = model.explained_variance_ratio_
         elif algorithm == 'LDA':
             model = LatentDirichletAllocation(n_components=k)
         else:
@@ -80,17 +78,17 @@ class Decomposition_Sparse:
 
         self.loading_scores = []
         for i in range(0, k):
-            if len(features)==0:
-                l_s = pd.Series(model.components_[i])
-            else:
-                l_s = pd.Series(model.components_[i], index=features)
             if algorithm == 'SVD':
                 scores = self.variance[i] * np.absolute(self.components[i])
             elif algorithm == 'PCA':
                 scores = (self.variance[i] * np.absolute(self.components[i])).real
             else:
                 scores = model.components_[i]
-            l_s = pd.Series(scores, index=features)
+            if len(features) == 0:
+                l_s = pd.Series(scores)
+            else:
+                l_s = pd.Series(scores, index=features)
+
             self.loading_scores.append(pd.Series.sort_values(l_s, ascending=False))
 
 
