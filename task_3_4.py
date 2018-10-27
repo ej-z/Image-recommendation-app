@@ -30,7 +30,14 @@ class Task_3_4:
         self.images_with_id = self.images_with_id.astype(np.float)
         self.images_id = self.images_with_id[:, 0].transpose()
         self.images = self.images_with_id[:, 1:]
-        self.decomposition = Decomposition(self.images, k, algorithm, [], True)
+        if algorithm == "LDA":
+            min = np.amin(self.images)
+            if min<0:
+                self.images[:,:]+=(abs(min))
+            self.decomposition = Decomposition(self.images, k, algorithm, [], False)
+        else:
+            self.decomposition = Decomposition(self.images, k, algorithm, [], True)
+
 
 
 
@@ -38,16 +45,12 @@ class Task_3_4:
         self.__decompose(table_name, model, algorithm, k)
         print('Variance captured by top ' + str(k) + ' latent semantics: ' + str(self.decomposition.variance))
         given_image_index = self.images_id.tolist().index(float(id))
-        print(given_image_index)
-        print(self.images_with_id[given_image_index][0])
         for i in range(0, k):
             print()
             print()
             print('Latent semantic '+str(i+1))
             print(self.decomposition.loading_scores[i])
         #decompose
-        print(len(self.images_id))
-        print(len(self.decomposition.decomposed_data))
 
         s_mat = [self.decomposition.decomposed_data[given_image_index]]
 
@@ -65,16 +68,14 @@ class Task_3_4:
             print(str(o['id'])+' - '+str(o['distance']))
 
         distances_loc = sorted_list(5, 'distance', True)
-        # in terms of location
-        #[('<loc_id>', (1, 2)), ('<loc_id>', (3, 2))]
-        locations_sorted = sorted(self.locations.items(), key=operator.itemgetter(1))
-        for i in range(0,len(locations_sorted)):
-            start_index = locations_sorted[i][1][0]
-            end_index = locations_sorted[i][1][1]
+
+        for location_id, ranges in self.locations.items():
+            start_index = ranges[0]
+            end_index = ranges[1]
             sum = 0.0
             for j in range(start_index, end_index):
                 sum = sum + euc_distance[0][j]
-            distances_loc.add({'id': locations_sorted[i][0], 'distance': sum/(end_index-start_index)})
+            distances_loc.add({'id': location_id, 'distance': sum/(end_index-start_index)})
 
         print('Top 5 similar objects in terms of location Id - Euclidean distance')
         print()
@@ -91,11 +92,7 @@ class Task_3_4:
             print('Latent semantic '+str(i+1))
             print(self.decomposition.loading_scores[i])
         #decompose
-
-        print(self.decomposition.decomposed_data.shape)
         s_mat = self.decomposition.decomposed_data[self.locations[id][0]:self.locations[id][1],:]
-        print(s_mat.shape)
-        print("hello",self.locations[id][0],self.locations[id][1])
         distances = sorted_list(5, 'distance', True)
 
         for location_id, ranges in self.locations.items():

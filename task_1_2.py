@@ -1,12 +1,13 @@
 from pymongo import MongoClient
-from decomposition_algorithms import Decomposition
+from decomposition_algorithms import Decomposition,Decomposition_Sparse
 from scipy import spatial
 from sklearn import metrics
 from sorted_list import sorted_list
+import math
 
 class Task_1_2:
 
-    def __decompose(self, tb, model, algorithm, k):
+    def __decompose(self, tb, model, algorithm, k, cutoff):
 
         client = MongoClient('localhost', 27017)
         db = client['mwdb']
@@ -28,8 +29,9 @@ class Task_1_2:
 
         truncated_terms = []
         truncated_data = []
+        cutoff = len(self.ids)*cutoff
         for key in data:
-            if len(data[key]) >= 10:
+            if len(data[key]) >= cutoff:
                 truncated_data.append(data[key])
                 truncated_terms.append(key)
         arr = [[0 for _ in range(len(truncated_terms))] for _ in range(len(self.ids))]
@@ -41,13 +43,11 @@ class Task_1_2:
             j = j + 1
 
         self.features = truncated_terms
-        self.decomposition = Decomposition(arr, k, algorithm, self.features, True)
+        self.decomposition = Decomposition_Sparse(arr, k, algorithm, self.features)
 
-    def task1(self, tb, model, algorithm, k):
+    def task1(self, tb, model, algorithm, k, cutoff):
 
-        self.__decompose(tb, model, algorithm, k)
-
-        print('Variance captured by top ' + str(k) + ' latent semantics: ' + str(self.decomposition.variance))
+        self.__decompose(tb, model, algorithm, k, cutoff)
 
         for i in range(0, k):
             print()
@@ -55,11 +55,9 @@ class Task_1_2:
             print('Latent semantic '+str(i+1))
             print(self.decomposition.loading_scores[i])
 
-    def task2(self, tb, model, algorithm, k, id):
+    def task2(self, tb, model, algorithm, k, id, cutoff):
 
-        self.__decompose(tb, model, algorithm, k)
-
-        print('Variance captured by top ' + str(k) + ' latent semantics: ' + str(self.decomposition.variance))
+        self.__decompose(tb, model, algorithm, k, cutoff)
 
         index = self.ids.index(id)
 
