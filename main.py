@@ -7,6 +7,7 @@ from sklearn import metrics
 import numpy as np
 from data_loading import DataLoading
 from os import system
+import Test
 
 
 def print_menu():
@@ -58,18 +59,18 @@ def main():
         option = input("Enter option: ")
         if option == '1':
             print('TASK 1')
-            print('e.g: usertext TF-IDF SVD 20')
+            print('e.g: usertext TF-IDF PCA 20 0.05')
             inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Task_1_2()
-            tasks.task1(ips[0], ips[1], ips[2], int(ips[3]))
+            tasks.task1(ips[0], ips[1], ips[2], int(ips[3]), float(ips[4]))
         elif option == '2':
             print('TASK 2')
-            print('e.g: usertext TF-IDF PCA 20 10117222@N04')
+            print('e.g: usertext TF-IDF PCA 20 10117222@N04 0.05')
             inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Task_1_2()
-            tasks.task2(ips[0], ips[1], ips[2], int(ips[3]), ips[4])
+            tasks.task2(ips[0], ips[1], ips[2], int(ips[3]), ips[4], float(ips[5]))
         elif option == '3':
             print('TASK 3')
             inp = input("Input: ")
@@ -105,5 +106,5 @@ def main():
         _ = system('cls')
 
 if __name__ == "__main__":
-
+    #Test.test()
     main()
