@@ -3,6 +3,7 @@ import collections
 import csv
 import requests
 import xml.etree.ElementTree as ET
+import os
 
 class DataLoading:
 
@@ -138,7 +139,26 @@ class DataLoading:
             t = db[l['title']]
             t.insert_many(data)
 
+    def process_common_terms_data(self):
 
+        files = os.listdir(self.path + "\\xml\\")
+        data = []
+        for file in files:
+            root = ET.parse(self.path + "\\xml\\" + file).getroot()
+            for photo in root.findall('photo'):
+                d = {}
+                d['location'] = file[:len(file)-4]
+                d['image'] = photo.attrib['id']
+                d['user'] = photo.attrib['userid']
+                tags = photo.attrib['tags']
+                d['terms'] = len(tags.split(' '))
+                data.append(d)
+
+        client = MongoClient('localhost', 27017)
+        db = client['mwdb']
+        table = db['LIU_commonterms']
+
+        table.insert_many(data)
 
     def __init__(self, p):
 

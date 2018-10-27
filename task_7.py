@@ -1,37 +1,80 @@
 import numpy as np
+from pymongo import MongoClient
+from tensorly import decomposition
+from sklearn.cluster import KMeans
 import pandas as pd
 import os
 
-def tensor_form():
-    cur_dir = os.path.dirname(os.path.realpath(__file__))
-    files = os.listdir(cur_dir + "\\data\\")
-    #names = ['acropolisathens.csv','agrafort.csv','Albert Memorial.csv','Altes Museum.csv','amiens_cathedral.csv','angelofthenorth.csv','angkor_wat.csv','ara_pacis.csv','arc_de_triomphe.csv','aztec_ruins.csv','berlin_cathedral.csv','bigben.csv','bok_tower_gardens.csv','brandenburg_gate.csv','cabrillo.csv','casa_batllo.csv','casa_rosada.csv','Castillo de San Marcos.csv','chartres_cathedral.csv','chichen_itza.csv','Christ the Redeemer.csv','cn_tower.csv','cologne_cathedral.csv','colosseum.csv','hearst_castle.csv','la_madeleine.csv','montezuma_castle.csv','nues_museum.csv','pont_alexandre.csv','The Civic Center in San Francisco.csv']
-    datafinal = []
-    term = 0
-    for i in files:
-        data = []
-        csv = pd.read_csv(cur_dir + "\\data\\" +i)
-        usid = list(set(csv["_userid"]))
-        imid = list(set(csv["_id"]))
-        while(len(imid)<300):
-            imid.append(-len(imid))
-        print("Processing file : " + i)
-        csv['tg_cnt'] = 0
-        term = term+20
-        for i in usid:
-            row_vector = [0] * len(imid)
-            for idx, j in enumerate(imid):
-                l = csv.loc[(csv._userid == str(i)) & (csv._id == j),"_tags"].tolist()
-                try:
-                    if len(l)>0:
-                        row_vector[idx] = len(l[0].split())
-                except:
-                    pass
-            data.append(row_vector)
-        datafinal.append(np.array(data))
-    a = np.dstack(datafinal)
-    return a
+class Task_7:
 
+    def task_7(self, k):
+        client = MongoClient('localhost', 27017)
+        db = client['mwdb']
+        table = db['LIU_commonterms']
 
-tensor_form()
+        locations = {}
+        images = {}
+        users = {}
+        l_idx = 0
+        i_idx = 0
+        u_idx = 0
+        #i = 0
+        for s in table.find({}):
+            if s['location'] not in locations:
+                locations[s['location']] = l_idx
+                l_idx = l_idx+1
+            if s['image'] not in images:
+                images[s['image']] = i_idx
+                i_idx = i_idx+1
+            if s['user'] not in users:
+                users[s['user']] = u_idx
+                u_idx = u_idx+1
+            #i = i+1
+            #if l_idx == 10:
+            #    break
+
+        tensor = np.empty((len(locations), len(images), len(users)), dtype=float)
+        #j = 0
+        for s in table.find({}):
+            tensor[locations[s['location']]][images[s['image']]][users[s['user']]] = float(s['terms'])
+            #j = j + 1
+            #if i == j:
+            #    break
+
+        factors = decomposition.parafac(tensor, k)
+
+        locationGroups = [[] for _ in range(k)]
+        kmeans = KMeans(n_clusters=k)
+        kmeans.fit(factors[0])
+        i = 0
+        for l in locations:
+            locationGroups[kmeans.labels_[i]].append(l)
+            i = i+1
+        imageGroups = [[] for _ in range(k)]
+        kmeans = KMeans(n_clusters=k)
+        kmeans.fit(factors[1])
+        i = 0
+        for l in images:
+            imageGroups[kmeans.labels_[i]].append(l)
+            i = i + 1
+        userGroups = [[] for _ in range(k)]
+        kmeans = KMeans(n_clusters=k)
+        kmeans.fit(factors[2])
+        i = 0
+        for l in users:
+            userGroups[kmeans.labels_[i]].append(l)
+            i = i + 1
+
+        for j in range(k):
+            print("User Group "+str(j+1))
+            print(userGroups[j])
+            print('-'*30)
+            print("Image Group " + str(j+1))
+            print(imageGroups[j])
+            print('-' * 30)
+            print("Location Group " + str(j+1))
+            print(locationGroups[j])
+            print('-' * 30)
+            print('-' * 30)
+
 
