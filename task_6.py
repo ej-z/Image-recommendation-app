@@ -47,7 +47,12 @@ class Task_6:
             j = j + 1
 
         n_arr = np.matrix(arr)
-        result = n_arr * n_arr.T
+        result = np.matmul(n_arr, n_arr.T)
         decomposition = Decomposition(result, k, algorithm, location_names)
-        print('Top-k latent semantics in the form of location (name)-weight pairs, in decreasing order of weights:')
-        print(decomposition.loading_scores)
+        print('Top-'+str(k)+' latent semantics in the form of location (name)-weight pairs, in decreasing order of weights:')
+
+        for i in range(0, k):
+            print()
+            print()
+            print('Latent semantic '+str(i+1))
+            print(decomposition.loading_scores[i])

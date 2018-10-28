@@ -100,13 +100,13 @@ def main():
             tasks.task5('locations', ips[0], int(ips[1]), ips[2])
         elif option == '6':
             print('TASK 6')
-            print('Sample: TF 1')
+            print('Sample: TF-IDF 1')
             inp = input('Input: ')
             ips = inp.split(' ')
             if len(ips[0]) == 0:
                 ips[0] = 'TF-IDF'
             tasks = Task_6()
-            tasks.task6('loctext', ips[0], 'SVD', ips[1])
+            tasks.task6('loctext', ips[0], 'SVD', int(ips[1]))
         elif option == '7':
             print('TASK 7')
             print("Sample: 5")
