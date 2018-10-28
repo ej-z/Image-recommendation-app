@@ -58,7 +58,7 @@ class Decomposition_Sparse:
         self.variance = evals
         self.components = evecs.T
         m_w = data.dot(evecs)
-        return m_w
+        return m_w.real
 
     def __init__(self, data, k, algorithm, features):
         _data = sparse.csr_matrix(data)
