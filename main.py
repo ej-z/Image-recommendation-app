@@ -78,23 +78,25 @@ def main():
             tasks.task2(ips[0], ips[1], ips[2], int(ips[3]), ips[4], float(ips[5]))
         elif option == '3':
             print('TASK 3')
-            inp = input("Input: locations CM PCA 5 10045579766")
+            print('Sample: CM PCA 5 10045579766')
+            inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Task_3_4()
-            tasks.task3(ips[0], ips[1], ips[2], int(ips[3]), ips[4])
+            tasks.task3('locations', ips[0], ips[1], int(ips[2]), ips[3])
         elif option == '4':
             print('TASK 4')
-            inp = input("Input: locations CM PCA 5 1")
+            print('Sample: CM PCA 5 1')
+            inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Task_3_4()
-            tasks.task4(ips[0], ips[1], ips[2], int(ips[3]), ips[4])
+            tasks.task4('locations', ips[0], ips[1], int(ips[2]), ips[3])
         elif option == '5':
             print('TASK 5')
-            print("Sample: locations PCA 5 1")
+            print("Sample: PCA 5 1")
             inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Task_5()
-            tasks.task5(ips[0], ips[1], int(ips[2]), ips[3])
+            tasks.task5('locations', ips[0], int(ips[1]), ips[2])
         elif option == '6':
             #TODO
             print('TODO')

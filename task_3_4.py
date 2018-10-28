@@ -57,7 +57,7 @@ class Task_3_4:
         distances = sorted_list(5, 'distance', True)
 
         euc_distance = metrics.euclidean_distances(s_mat,self.decomposition.decomposed_data)
-        #euc_distance = metrics.euclidean_distances([self.images[given_image_index]],self.images)
+        # euc_distance = metrics.euclidean_distances([self.images[given_image_index]],self.images)
         for i in range(0, len(self.images_id)):
             distances.add({'id': self.images_id[i], 'distance': euc_distance[0][i]})
 
