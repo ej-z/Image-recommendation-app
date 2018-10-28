@@ -43,12 +43,12 @@ class Task_3_4:
 
     def task3(self, table_name, model, algorithm, k, id):
         self.__decompose(table_name, model, algorithm, k)
-        print('Variance captured by top ' + str(k) + ' latent semantics: ' + str(self.decomposition.variance))
         given_image_index = self.images_id.tolist().index(float(id))
         for i in range(0, k):
             print()
             print()
             print('Latent semantic '+str(i+1))
+            print('FeatureNo  Weight')
             print(self.decomposition.loading_scores[i])
         #decompose
 
@@ -85,11 +85,11 @@ class Task_3_4:
 
     def task4(self, table_name, model, algorithm, k, id):
         self.__decompose(table_name, model, algorithm, k)
-        print('Variance captured by top ' + str(k) + ' latent semantics: ' + str(self.decomposition.variance))
         for i in range(0, k):
             print()
             print()
             print('Latent semantic '+str(i+1))
+            print('FeatureNo  Weight')
             print(self.decomposition.loading_scores[i])
         #decompose
         s_mat = self.decomposition.decomposed_data[self.locations[id][0]:self.locations[id][1],:]
