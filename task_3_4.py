@@ -62,7 +62,7 @@ class Task_3_4:
         for i in range(0, len(self.images_id)):
             distances.add({'id': self.images_id[i], 'distance': euc_distance[0][i]})
 
-        print('Top 5 similar objects in terms of image Id - Euclidean distance')
+        print('Top 5 similar images and similarity score')
         print()
         for i in range(0,5):
             o = distances.extract()
@@ -78,7 +78,7 @@ class Task_3_4:
                 sum = sum + euc_distance[0][j]
             distances_loc.add({'id': location_id, 'distance': sum/(end_index-start_index)})
 
-        print('Top 5 similar objects in terms of location Id - Euclidean distance')
+        print('Top 5 similar locations and similarity score')
         print()
         for i in range(0,5):
             o = distances_loc.extract()
@@ -103,7 +103,7 @@ class Task_3_4:
             distances.add({'id': location_id, 'distance': euc_distance})
 
 
-        print('Top 5 similar locations in terms of Euclidean distance')
+        print('Top 5 similar locations and similarity score')
         print()
         for i in range(0,5):
             o = distances.extract()

@@ -5,7 +5,7 @@ import numpy as np
 from sklearn import metrics
 from sorted_list import sorted_list
 import operator
-
+from numpy import linalg as LA
 
 class Task_5:
     def __decompose(self, table_name, algorithm, k):
@@ -65,10 +65,12 @@ class Task_5:
         distances = sorted_list(5, 'distance', True)
 
         for location_id, ranges in self.locations.items():
-            euc_distance = metrics.euclidean_distances(s_mat,self.decomposition.decomposed_data[ranges[0]:ranges[1],:])
-            distances.add({'id': location_id, 'distance': np.mean(euc_distance)})
+            #euc_distance = metrics.euclidean_distances(s_mat,self.decomposition.decomposed_data[ranges[0]:ranges[1],:])
+            #distances.add({'id': location_id, 'distance': np.mean(euc_distance)})
+            euc_distance = abs(LA.norm(s_mat)-LA.norm(self.decomposition.decomposed_data[ranges[0]:ranges[1],:]))
+            distances.add({'id': location_id, 'distance': euc_distance})
 
-        print('Top 5 similar locations in terms of Euclidean distance')
+        print('Top 5 similar locations and similarity score')
         print()
         for i in range(0,5):
             o = distances.extract()
