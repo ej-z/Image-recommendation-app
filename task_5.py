@@ -39,31 +39,24 @@ class Task_5:
             self.locations[loc['id']] = (count, count + new_loc_size)
             count += new_loc_size
 
-        self.decomposition = Decomposition(data, k, algorithm, [], True)
-
-
-
-        '''for loc in locations_table:
-            each_loc_table = db[loc['title']].find({"model":model})[0]
-            data.extend(each_loc_table["data"])
-            new_loc_size = len(each_loc_table["data"])
-            self.locations[loc['id']] = (count, count+new_loc_size)
-            count+=new_loc_size
-
-        self.images_with_id = np.array(data)
-        self.images_with_id = self.images_with_id.astype(np.float)
-        self.images_id = self.images_with_id[:, 0].transpose()
-        self.images = self.images_with_id[:, 1:]
-        self.decomposition = Decomposition(self.images, k, algorithm, [], True)'''
+        data = np.asarray(data)
+        if algorithm == "LDA":
+            min = np.amin(data)
+            if min<0:
+                data[:,:]+=(abs(min))
+            self.decomposition = Decomposition(data, k, algorithm, [], False)
+        else:
+            self.decomposition = Decomposition(data, k, algorithm, [], True)
 
 
     def task5(self, table_name, algorithm, k, id):
         self.__decompose(table_name, algorithm, k*10)
-        print('Variance captured by top ' + str(k) + ' latent semantics: ' + str(self.decomposition.variance))
+        #print('Variance captured by top ' + str(k) + ' latent semantics: ' + str(self.decomposition.variance))
         for i in range(0, k):
             print()
             print()
             print('Latent semantic '+str(i+1))
+            print('FeatureNo  Weight')
             print(self.decomposition.loading_scores[i])
         #decompose
 

@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from task_1_2 import Task_1_2
 from task_3_4 import Task_3_4
 from task_5 import Task_5
+from task_6 import Task_6
 from task_7 import Task_7
 import collections
 import math
@@ -78,26 +79,34 @@ def main():
             tasks.task2(ips[0], ips[1], ips[2], int(ips[3]), ips[4], float(ips[5]))
         elif option == '3':
             print('TASK 3')
-            inp = input("Input: locations CM PCA 5 10045579766")
+            print('Sample: CM PCA 5 10045579766')
+            inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Task_3_4()
-            tasks.task3(ips[0], ips[1], ips[2], int(ips[3]), ips[4])
+            tasks.task3('locations', ips[0], ips[1], int(ips[2]), ips[3])
         elif option == '4':
             print('TASK 4')
-            inp = input("Input: locations CM PCA 5 1")
+            print('Sample: CM PCA 5 1')
+            inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Task_3_4()
-            tasks.task4(ips[0], ips[1], ips[2], int(ips[3]), ips[4])
+            tasks.task4('locations', ips[0], ips[1], int(ips[2]), ips[3])
         elif option == '5':
             print('TASK 5')
-            print("Sample: locations PCA 5 1")
+            print("Sample: PCA 5 1")
             inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Task_5()
-            tasks.task5(ips[0], ips[1], int(ips[2]), ips[3])
+            tasks.task5('locations', ips[0], int(ips[1]), ips[2])
         elif option == '6':
-            #TODO
-            print('TODO')
+            print('TASK 6')
+            print('Sample: TF 1')
+            inp = input('Input: ')
+            ips = inp.split(' ')
+            if len(ips[0]) == 0:
+                ips[0] = 'TF-IDF'
+            tasks = Task_6()
+            tasks.task6('loctext', ips[0], 'SVD', ips[1])
         elif option == '7':
             print('TASK 7')
             print("Sample: 5")
