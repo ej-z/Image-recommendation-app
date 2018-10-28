@@ -4,6 +4,7 @@ from scipy import spatial
 import numpy as np
 from sklearn import metrics
 from sorted_list import sorted_list
+from numpy import linalg as LA
 import operator
 
 '''
@@ -96,8 +97,11 @@ class Task_3_4:
         distances = sorted_list(5, 'distance', True)
 
         for location_id, ranges in self.locations.items():
-            euc_distance = metrics.euclidean_distances(s_mat,self.decomposition.decomposed_data[ranges[0]:ranges[1],:])
-            distances.add({'id': location_id, 'distance': np.mean(euc_distance)})
+            #euc_distance = metrics.euclidean_distances(s_mat,self.decomposition.decomposed_data[ranges[0]:ranges[1],:])
+            #distances.add({'id': location_id, 'distance': np.mean(euc_distance)})
+            euc_distance = abs(LA.norm(s_mat)-LA.norm(self.decomposition.decomposed_data[ranges[0]:ranges[1],:]))
+            distances.add({'id': location_id, 'distance': euc_distance})
+
 
         print('Top 5 similar locations in terms of Euclidean distance')
         print()
