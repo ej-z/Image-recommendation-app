@@ -33,7 +33,7 @@ class Task_7:
             #if l_idx == 10:
             #    break
 
-        tensor = np.empty((len(locations), len(images), len(users)), dtype=float)
+        tensor = np.zeros((len(locations), len(images), len(users)), dtype=float)
         #j = 0
         for s in table.find({}):
             tensor[locations[s['location']]][images[s['image']]][users[s['user']]] = float(s['terms'])
