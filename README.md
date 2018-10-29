@@ -1,8 +1,6 @@
 How to run
-1. pip install numpy
-2. pip install scipy
-3. pip install sklearn
-4. python main.py
+1. pip install -r requirements.txt
+2. python main.py
 
 How to use
 1. Task 1
