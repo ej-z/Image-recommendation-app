@@ -10,9 +10,10 @@ How to use
 3. Task 3
 4. Task 4
 5. Task 5
-6. Load data
-7. Sample input
-8. Quit
+6. Task 6
+7. Task 7
+8. Load data
+0. Quit
 
 Task 1 calculates k similar users to the given user based on given textual model. 
 Input: user_id model(TF, DF, TF-IDF) k
