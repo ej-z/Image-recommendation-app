@@ -50,7 +50,7 @@ class Task_5:
 
 
     def task5(self, table_name, algorithm, k, id):
-        self.__decompose(table_name, algorithm, k*10)
+        self.__decompose(table_name, algorithm, k)
         #print('Variance captured by top ' + str(k) + ' latent semantics: ' + str(self.decomposition.variance))
         for i in range(0, k):
             print()
