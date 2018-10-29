@@ -26,10 +26,15 @@ Input: location_id model(TF, DF, TF-IDF) k
 Task 4 calculates k similar locations to the given location based on given visual model.
 Input: location_id model(CM, CM3x3, CN, CN3x3, CSD, GLRLM, GLRLM3x3, HOG, LBP, LBP3x3) k
 
-Task 5 calculates k similar locations to the given location based on all visual model.
+Task 5 calculates k similar locations to the given location based on all visual models.
 Input: location_id k
 
-Task 6 Loads textual and visual descriptors data to MongoDB
+Task 6 prints k latent semantics using SVD algorithm for the location - location similarity matrix the the given sample input
+Input k
+
+Task 7 prints non overlapping groups of user, images and locations output based on k latent semantics for the the given sample input
+Input k
+
+Option 8 Loads textual and visual descriptors data to MongoDB
 Input: path to the dataset
 
-Task 7 prints output for the the given sample input

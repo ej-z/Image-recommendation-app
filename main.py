@@ -11,7 +11,6 @@ from sklearn import metrics
 import numpy as np
 from data_loading import DataLoading
 from os import system
-import Test
 
 
 def print_menu():
@@ -23,40 +22,8 @@ def print_menu():
     print('6. Task 6')
     print('7. Task 7')
     print('8. Load data')
-    print('9. Sample input')
     print('0. Quit')
 
-def sample_run():
-    print('Task 1-----------------')
-    #tasks.task1_3('usertext', '39052554@N00', 'TF', 5)
-    print('Task 1-----------------')
-    #tasks.task1_3('usertext', '56087830@N00', 'DF', 8)
-    print('Task 1-----------------')
-    #tasks.task1_3('usertext', '56087830@N00', 'TF-IDF', 5)
-    print()
-    print('Task 2-----------------')
-    #tasks.task1_3('imagetext', '4459178306', 'TF', 10)
-    print('Task 2-----------------')
-    #tasks.task1_3('imagetext', '288051306', 'DF', 5)
-    print('Task 2-----------------')
-    #tasks.task1_3('imagetext', '288051306', 'TF-IDF', 5)
-    print()
-    print('Task 3-----------------')
-    #tasks.task1_3('loctext', '27', 'TF', 5)
-    print('Task 3-----------------')
-    #tasks.task1_3('loctext', '6', 'DF', 5)
-    print('Task 3-----------------')
-    #tasks.task1_3('loctext', '6', 'TF-IDF', 7)
-    print()
-    print('Task 4-----------------')
-    #tasks.task4('10', 'CN3x3', 7)
-    print('Task 4-----------------')
-    #tasks.task4('18', 'GLRLM', 5)
-    print('Task 4-----------------')
-    #tasks.task4('30', 'LBP3x3', 5)
-    print()
-    print('Task 5-----------------')
-    #tasks.task5('4', 5)
 
 def main():
 
@@ -125,8 +92,6 @@ def main():
             dt.process_locations_textual_data()
             dt.process_visual_data()
             dt.process_common_terms_data()
-        elif option == '9':
-            sample_run()
         elif option == '0':
             break
         else:
