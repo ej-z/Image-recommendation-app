@@ -34,7 +34,7 @@ class Task_5ab:
             data.extend(images)
 
         data = np.asarray(data)
-        self.task4(6, 16, data)
+        self.task4(13, 12, data)
         given_image_index = data_ids.index(float(id))
         res = self.lsh_index.query(data[given_image_index])
         for i in res:
@@ -55,7 +55,7 @@ class Task_5ab:
 
         print('Top 5 similar images and similarity score')
         print()
-        for i in range(0,5):
+        for i in range(0,25):
             o = distances.extract()
             print(str(o['id'])+' - '+str(o['distance']))
 
