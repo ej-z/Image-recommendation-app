@@ -1,6 +1,8 @@
 import numpy as np
 from lsh_index import LSH_index
 from pymongo import MongoClient
+from sklearn import metrics
+from sorted_list import sorted_list
 
 class Task_5ab:
     def task4(self, l, k, data):
@@ -32,11 +34,30 @@ class Task_5ab:
             data.extend(images)
 
         data = np.asarray(data)
-        self.task4(6, 7, data)
+        self.task4(6, 16, data)
         given_image_index = data_ids.index(float(id))
         res = self.lsh_index.query(data[given_image_index])
         for i in res:
-            print(data_ids[i])
+            #print("data_result", data[i])
+           # print("given_image", data[given_image_index])
+            print("data id =",data_ids[i])
+            print("value =",np.linalg.norm(data[i]-data[given_image_index]))
+
+        '''To delete'''
+        s_mat = [data[given_image_index]]
+
+        distances = sorted_list(25, 'distance', True)
+
+        euc_distance = metrics.euclidean_distances(s_mat,data)
+        # euc_distance = metrics.euclidean_distances([self.images[given_image_index]],self.images)
+        for i in range(0, len(data_ids)):
+            distances.add({'id': data_ids[i], 'distance': euc_distance[0][i]})
+
+        print('Top 5 similar images and similarity score')
+        print()
+        for i in range(0,5):
+            o = distances.extract()
+            print(str(o['id'])+' - '+str(o['distance']))
 
 if __name__ == '__main__':
     tk = Task_5ab()
