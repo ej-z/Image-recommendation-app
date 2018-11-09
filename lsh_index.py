@@ -32,13 +32,14 @@ class LSH_index:
 
 
     def query(self, q):
-        index_res = []
+        index_res = set()
         for j in range(self.layers):
             key = ""
             for f in range(self.k):
                 rv_hat = self.random_vectors[j][f]/np.linalg.norm(self.random_vectors[j][f])
                 key+=(","+(str(math.floor((np.dot(rv_hat,q)+self.shifts[j][f])/self.w))))
-            index_res.extend(self.dict_arr[j][key])
+            print("unique data in single layer",self.dict_arr[j][key])
+            index_res.update(self.dict_arr[j][key])
         return index_res
 
 
