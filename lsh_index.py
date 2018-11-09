@@ -30,7 +30,6 @@ class LSH_index:
                     self.dict_arr[j][key] = set()
                 self.dict_arr[j][key].add(i)
 
-
     def query(self, q):
         index_res = set()
         for j in range(self.layers):

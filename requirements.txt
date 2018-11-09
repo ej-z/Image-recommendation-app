@@ -6,3 +6,4 @@ requests
 operator
 pandas
 tensorly
+matplotlib
