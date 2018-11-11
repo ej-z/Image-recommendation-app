@@ -12,6 +12,8 @@ import numpy as np
 from data_loading import DataLoading
 from os import system
 
+from phase3_task1 import Phase3_task1
+
 
 def print_menu():
     print('1. Task 1')
@@ -32,11 +34,11 @@ def main():
         option = input("Enter option: ")
         if option == '1':
             print('TASK 1')
-            print('e.g: usertext TF-IDF PCA 20 0.05')
+            print('e.g: 10 text')
             inp = input("Input: ")
             ips = inp.split(' ')
-            tasks = Task_1_2()
-            tasks.task1(ips[0], ips[1], ips[2], int(ips[3]), float(ips[4]))
+            tasks = Phase3_task1()
+            tasks.task1(int(ips[0]), ips[1])
         elif option == '2':
             print('TASK 2')
             print('e.g: usertext TF-IDF PCA 20 10117222@N04 0.05')
