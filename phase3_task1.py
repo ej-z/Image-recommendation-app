@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from scipy.spatial.distance import cdist
+from scipy.spatial.distance import euclidean
 from scipy.spatial.distance import cosine
 from sklearn.metrics.pairwise import euclidean_distances
 import numpy as np
@@ -9,11 +10,17 @@ import pickle
 
 class Phase3_task1:
     def task1(self, k, desc):
+        if desc == 'text':
+            self.text_graph(k)
+        else:
+            self.vis_graph(k)
+
+    def text_graph(self, k):
+
         client = MongoClient('localhost', 27017)
         db = client['mwdb']
         tb = 'imagetext'
-        if desc != 'text':
-            tb =''
+
         table = db[tb]
 
         data = []
@@ -44,20 +51,24 @@ class Phase3_task1:
         #         img_dist[img1['id']].append({'id':img2['id'], 'dist':dist})
 
         for img1 in data:
+            print("image id", img1['id'])
             img_dist[img1['id']] = []
             distances = []
             for img2 in data:
                 dist = self.get_sim(img1, img2)
                 distances.append({'id': img2['id'], 'dist': dist})
             img_dist[img1['id']] = sorted(distances, key=itemgetter('dist'), reverse=True)
-            if len(img_dist) > 100:
+            if len(img_dist) % 100 == 0:
+                print(len(img_dist))
                 break
 
-        print("sim")
-        print(img_dist)
+        print("-----------------------")
+        # print(img_dist)
+        print("writing to file")
         file = open('img_img_graph', 'wb')
         pickle.dump(img_dist, file)
         file.close()
+        print("writing to file done")
 
 
     def get_sim(self, img1, img2):
@@ -108,3 +119,63 @@ class Phase3_task1:
                 values.append(0)
         return values
 
+
+    def vis_graph(self, k):
+        print("using visual descriptors")
+
+        client = MongoClient('localhost', 27017)
+        db = client['mwdb']
+        tb = 'locations'
+
+        table = db[tb]
+        models = ['CM', 'CM3x3', 'CN', 'CN3x3', 'CSD', 'GLRLM', 'GLRLM3x3', 'HOG', 'LBP', 'LBP3x3']
+        data = []
+        count = 0
+        self.locations_img_ids = {}
+        img_dist = {}
+        index = 0
+        image_ids = []
+
+
+        for loc in table.find({}):
+            index += 1
+            images = []
+            # image_ids = []
+            for idx, model in enumerate(models):
+                # model = 'CN'
+                # idx = 0
+                each_loc_model_table = db[loc['title']].find({"model":model})[0]
+                images_with_ids = np.array(each_loc_model_table['data'])
+                images_with_ids = images_with_ids.astype(np.float)
+                if idx == 0:
+                    #image_ids.extend(each_loc_model_table['data'])
+                    image_ids.extend(images_with_ids[:, 0])
+                    images.extend(images_with_ids[:, 1:])
+                else:
+                    images = np.concatenate((images, images_with_ids[:, 1:]), axis=1)
+            data.extend(images)
+            # new_loc_size = len(images)
+            # self.locations_img_ids[loc['id']] = image_ids
+            # self.locations[loc['id']] = (count, count + new_loc_size)
+            # count += new_loc_size
+            # if index == 2:
+            #     break
+
+
+        data = np.asarray(data)
+        print(data.shape)
+
+        for i, img1 in enumerate(data):
+            img_dist[image_ids[i]] = []
+            distances = []
+            for j, img2 in enumerate(data):
+                dist = euclidean(img1, img2)
+                distances.append({'id': image_ids[j], 'dist': dist})
+                # img_dist[image_ids[i]]  = distances
+            img_dist[image_ids[i]] = sorted(distances, key=itemgetter('dist'))
+            if len(img_dist) > 1:
+                break
+
+        file = open('img_img_graph_vis', 'wb')
+        pickle.dump(img_dist, file)
+        file.close()
