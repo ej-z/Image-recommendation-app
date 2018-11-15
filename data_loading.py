@@ -1,9 +1,10 @@
 from pymongo import MongoClient
 import collections
 import csv
-import requests
 import xml.etree.ElementTree as ET
 import os
+from scipy import sparse
+from sklearn.metrics.pairwise import cosine_similarity
 
 class DataLoading:
 
@@ -159,6 +160,46 @@ class DataLoading:
         table = db['LIU_commonterms']
 
         table.insert_many(data)
+
+    def generate_img_text_graph(self):
+        client = MongoClient('localhost', 27017)
+        db = client['mwdb']
+        tb = 'imagetext'
+        table = db[tb]
+        model = 'TF-IDF'
+
+        img_ids = {}
+        img_terms = {}
+
+        img_index = 0
+        term_index = 0
+        for img in table.find({}):
+            img_ids[img['id']] = img_index
+            img_index = img_index + 1
+            for term in img['desc']:
+                if term['term'] not in img_terms:
+                    img_terms[term['term']] = term_index
+                    term_index = term_index + 1
+
+
+        matrix = sparse.lil_matrix((img_index, term_index), dtype=float)
+
+
+        for img in table.find({}):
+            for term in img['desc']:
+                matrix[img_ids[img['id']], img_terms[term['term']]] = term[model]
+
+        cos_sim = cosine_similarity(matrix, matrix)
+
+        table = db['img_img_text']
+        for i in range(img_index):
+            res = []
+            for j in range(img_index):
+                res.append({'id': j, 'dist': cos_sim[i][j]})
+
+            sorted(res, key=lambda k: k['dist'], reverse=True)
+            table.insert({'id': i, 'data': res})
+
 
     def __init__(self, p):
 

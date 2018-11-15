@@ -3,10 +3,9 @@ import pandas as pd
 
 class PageRanks:
 
-    def page_rank(self, data, k):
+    def page_rank(self, data):
 
-        img_ids, data = self._process_data(data, k)
-        n = len(data)
+        n = len(data.img_ids)
 
         old, new = np.zeros(n), np.zeros(n)
         initial = float(1/n)
@@ -18,11 +17,11 @@ class PageRanks:
             old = new.copy()
             for i in range(n):
                 s = 0
-                for x in data[i]:
-                    s = s + (old[x]/k)
+                for x in data.graph[i]:
+                    s = s + (old[x['id']]/data.k)
                 new[i] = (1-d) + (d * s)
 
-        l_s = pd.Series(new/float(sum(new)), index=img_ids)
+        l_s = pd.Series(new/float(sum(new)), index=data.img_ids)
         return pd.Series.sort_values(l_s, ascending=False)
 
 

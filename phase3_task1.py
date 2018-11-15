@@ -5,10 +5,36 @@ from sklearn.metrics.pairwise import euclidean_distances
 import numpy as np
 from operator import itemgetter
 import pickle
+from img_img_data import Img_Img_Data
 
 
 class Phase3_task1:
-    def task1(self, k, desc):
+
+    def task1(self, k, type):
+
+        client = MongoClient('localhost', 27017)
+        db = client['mwdb']
+        tb = 'imagetext'
+
+        if type == 'text':
+            data_table = db['img_img_text']
+            id_table = db['imagetext']
+        else:
+            return
+
+        graph = []
+        img_ids = []
+        for id in id_table.find({}):
+            img_ids.append(id['id'])
+
+
+        for d in data_table.find({}):
+            graph.append(d['data'][:k])
+
+        return Img_Img_Data(img_ids, graph, k)
+
+
+    def task111(self, k, desc):
         client = MongoClient('localhost', 27017)
         db = client['mwdb']
         tb = 'imagetext'

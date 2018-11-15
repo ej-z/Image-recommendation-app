@@ -13,6 +13,7 @@ from data_loading import DataLoading
 from os import system
 
 from phase3_task1 import Phase3_task1
+from phase3_task3 import Phase3_task3
 
 
 def print_menu():
@@ -28,7 +29,7 @@ def print_menu():
 
 
 def main():
-
+    data = []
     while True:
         print_menu()
         option = input("Enter option: ")
@@ -38,7 +39,7 @@ def main():
             inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Phase3_task1()
-            tasks.task1(int(ips[0]), ips[1])
+            data = tasks.task1(int(ips[0]), ips[1])
         elif option == '2':
             print('TASK 2')
             print('e.g: usertext TF-IDF PCA 20 10117222@N04 0.05')
@@ -102,5 +103,11 @@ def main():
         _ = system('cls')
 
 if __name__ == "__main__":
+    #dt = DataLoading('0')
+    #dt.generate_img_text_graph()
+    p1 = Phase3_task1()
+    data = p1.task1(5,'text')
+    p3 = Phase3_task3()
+    p3.task_3(data, 10)
     #Test.test()
-    main()
+    #main()
