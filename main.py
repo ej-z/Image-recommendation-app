@@ -95,8 +95,8 @@ def main():
             dt.process_locations_textual_data()
             dt.process_visual_data()
             dt.process_common_terms_data()
-            dt.generate_img_text_graph()
-            dt.generate_img_text_graph()
+            # dt.generate_img_text_graph()
+            dt.generate_img_img_vis_graph()
         elif option == '0':
             break
         else:
