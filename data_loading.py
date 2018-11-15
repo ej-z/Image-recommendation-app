@@ -151,6 +151,7 @@ class DataLoading:
                 d['location'] = file[:len(file)-4]
                 d['image'] = photo.attrib['id']
                 d['user'] = photo.attrib['userid']
+                d['imagepath'] = self.path + '\img\\' + file[:len(file)-4] + '\\' + photo.attrib['id'] + '.jpg'
                 tags = photo.attrib['tags']
                 d['terms'] = len(tags.split(' '))
                 data.append(d)

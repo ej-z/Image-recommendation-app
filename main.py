@@ -95,6 +95,7 @@ def main():
             dt.process_locations_textual_data()
             dt.process_visual_data()
             dt.process_common_terms_data()
+            dt.generate_img_text_graph()
         elif option == '0':
             break
         else:
@@ -105,9 +106,9 @@ def main():
 if __name__ == "__main__":
     #dt = DataLoading('0')
     #dt.generate_img_text_graph()
-    p1 = Phase3_task1()
-    data = p1.task1(5,'text')
-    p3 = Phase3_task3()
-    p3.task_3(data, 10)
+    #p1 = Phase3_task1()
+    #data = p1.task1(5,'text')
+    #p3 = Phase3_task3()
+    #p3.task_3(data, 10)
     #Test.test()
-    #main()
+    main()
