@@ -1,48 +1,38 @@
 import numpy as np
 import pandas as pd
+from scipy import sparse
 
 class PageRanks:
 
     def page_rank(self, data):
 
         n = len(data.img_ids)
-
-        old, new = np.zeros(n), np.zeros(n)
-        initial = float(1/n)
-        for i in range(n):
-            new[i] = initial
-
+        M = self._process_data(data)
+        E = np.zeros((n, n))
+        dp = 1/n
+        #TODO: presonalization should come into effect here, I think.
+        E[:] = dp
         d = 0.85
+        A = d * M.transpose() + ((1 - d) * E)
+
+        old, new = np.zeros(shape=(n, 1)), np.zeros(shape=(n, 1))
+        new[:] = dp
         while abs(sum(old)-sum(new)) > 0.0001:
             old = new.copy()
-            for i in range(n):
-                s = 0
-                for x in data.graph[i]:
-                    s = s + (old[x['id']]/data.k)
-                new[i] = (1-d) + (d * s)
+            new = A * new
 
         l_s = pd.Series(new/float(sum(new)), index=data.img_ids)
         return pd.Series.sort_values(l_s, ascending=False)
 
 
-    def _process_data(self, data, k):
+    def _process_data(self, data):
 
-        img_ids = []
-        img_ind = {}
+        n = len(data.img_ids)
+        M = sparse.lil_matrix((n, n), dtype=float)
 
-        i = 0
-        for key in data:
-            img_ids.append(key)
-            img_ind[key] = i
-            i = i+1
+        for i in range(n):
+            for j in range(data.k):
+                #TODO: actual probability distribution
+                M[i, data.graph[i][j]['id']] = 1/data.k
 
-        d = np.zeros((len(data), k))
-        i = 0
-        for key in data:
-            j = 0
-            for ids in data[key]:
-                d[i][j] = img_ind[ids['id']]
-                j = j + 1
-            i = i + 1
-
-        return img_ids, d
+        return M

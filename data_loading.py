@@ -215,9 +215,9 @@ class DataLoading:
         table = db[tb]
         models = ['CM', 'CM3x3', 'CN', 'CN3x3', 'CSD', 'GLRLM', 'GLRLM3x3', 'HOG', 'LBP', 'LBP3x3']
         data = []
-        count = 0
+        #count = 0
         self.locations_img_ids = {}
-        img_dist = {}
+        #img_dist = {}
         index = 0
         image_ids = []
 
@@ -245,16 +245,13 @@ class DataLoading:
 
         img_img_tb = 'image_image_vis'
         img_id_tb = 'image_id_vis'
-        db[img_img_tb].remove({})
-        db[img_id_tb].remove({})
 
-        for i, img1 in enumerate(euc_distances):
-            img_dist[i] = []
+        for i in range(len(euc_distances)):
             distances = []
-            for j, img2 in enumerate(euc_distances):
+            for j in range(len(euc_distances)):
                 distances.append({'id': j, 'dist': euc_distances[i][j]})
-            img_dist[i] = sorted(distances, key=itemgetter('dist'))
-            db[img_img_tb].insert({'id': i, 'data': img_dist[i]})
+            sorted(distances, key=lambda k: k['dist'])
+            db[img_img_tb].insert({'id': i, 'data': distances})
             db[img_id_tb].insert({'id': i, 'image_id': image_ids[i]})
 
     def __init__(self, p):
