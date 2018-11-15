@@ -18,18 +18,19 @@ class Phase3_task1:
         if type == 'text':
             data_table = db['img_img_text']
             id_table = db['imagetext']
-        else:
-            self.vis_graph(k)
             return
+        else:
+            data_table = db['image_image_vis']
+            id_table = db['image_id_vis']
 
         graph = []
         img_ids = []
         for id in id_table.find({}):
-            img_ids.append(id['id'])
+            img_ids.append(id['image_id'])
 
 
         for d in data_table.find({}):
-            graph.append(d['data'][:k])
+            graph.append(d['data'][:k+1])
 
         return Img_Img_Data(img_ids, graph, k)
 

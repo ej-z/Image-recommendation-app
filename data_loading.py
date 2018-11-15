@@ -5,6 +5,10 @@ import xml.etree.ElementTree as ET
 import os
 from scipy import sparse
 from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+from operator import itemgetter
+from sklearn.metrics.pairwise import euclidean_distances
+
 
 class DataLoading:
 
@@ -201,6 +205,57 @@ class DataLoading:
             sorted(res, key=lambda k: k['dist'], reverse=True)
             table.insert({'id': i, 'data': res})
 
+    def generate_img_img_vis_graph(self):
+        print("using visual descriptors")
+
+        client = MongoClient('localhost', 27017)
+        db = client['mwdb']
+        tb = 'locations'
+
+        table = db[tb]
+        models = ['CM', 'CM3x3', 'CN', 'CN3x3', 'CSD', 'GLRLM', 'GLRLM3x3', 'HOG', 'LBP', 'LBP3x3']
+        data = []
+        count = 0
+        self.locations_img_ids = {}
+        img_dist = {}
+        index = 0
+        image_ids = []
+
+
+        for loc in table.find({}):
+            index += 1
+            images = []
+            for idx, model in enumerate(models):
+                each_loc_model_table = db[loc['title']].find({"model":model})[0]
+                images_with_ids = np.array(each_loc_model_table['data'])
+                images_with_ids = images_with_ids.astype(np.float)
+                if idx == 0:
+                    image_ids.extend(images_with_ids[:, 0])
+                    images.extend(images_with_ids[:, 1:])
+                else:
+                    images = np.concatenate((images, images_with_ids[:, 1:]), axis=1)
+            data.extend(images)
+
+        data = np.asarray(data)
+        print('data shape', data.shape)
+
+        euc_distances = euclidean_distances(data, data)
+        euc_distances = np.asarray(euc_distances)
+        print('distance matrix shape', euc_distances.shape)
+
+        img_img_tb = 'image_image_vis'
+        img_id_tb = 'image_id_vis'
+        db[img_img_tb].remove({})
+        db[img_id_tb].remove({})
+
+        for i, img1 in enumerate(euc_distances):
+            img_dist[i] = []
+            distances = []
+            for j, img2 in enumerate(euc_distances):
+                distances.append({'id': j, 'dist': euc_distances[i][j]})
+            img_dist[i] = sorted(distances, key=itemgetter('dist'))
+            db[img_img_tb].insert({'id': i, 'data': img_dist[i]})
+            db[img_id_tb].insert({'id': i, 'image_id': image_ids[i]})
 
     def __init__(self, p):
 
