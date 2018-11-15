@@ -19,6 +19,7 @@ class Phase3_task1:
             data_table = db['img_img_text']
             id_table = db['imagetext']
         else:
+            self.vis_graph(k)
             return
 
         graph = []
@@ -188,17 +189,24 @@ class Phase3_task1:
         data = np.asarray(data)
         print(data.shape)
 
-        for i, img1 in enumerate(data):
-            img_dist[image_ids[i]] = []
-            distances = []
-            for j, img2 in enumerate(data):
-                dist = euclidean(img1, img2)
-                distances.append({'id': image_ids[j], 'dist': dist})
-                # img_dist[image_ids[i]]  = distances
-            img_dist[image_ids[i]] = sorted(distances, key=itemgetter('dist'))
-            if len(img_dist) > 1:
-                break
+        euc_distances = euclidean_distances(data, data)
 
-        file = open('img_img_graph_vis', 'wb')
-        pickle.dump(img_dist, file)
-        file.close()
+        euc_distances = np.asarray(euc_distances)
+
+        print(euc_distances.shape)
+
+        img_img_tb = 'image_image_vis'
+        img_id_tb = 'image_id_vis'
+        db[img_img_tb].remove({})
+        db[img_id_tb].remove({})
+
+        for i, img1 in enumerate(euc_distances):
+            img_dist[i] = []
+            distances = []
+            for j, img2 in enumerate(euc_distances):
+                distances.append({'id': j, 'dist': euc_distances[i][j]})
+            img_dist[i] = sorted(distances, key=itemgetter('dist'))
+            db[img_img_tb].insert({'id': i, 'data': img_dist[i]})
+            db[img_id_tb].insert({'id': i, 'image_id': image_ids[i]})
+            # if len(img_dist) > 1:
+            #     break

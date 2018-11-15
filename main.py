@@ -35,7 +35,7 @@ def main():
         option = input("Enter option: ")
         if option == '1':
             print('TASK 1')
-            print('e.g: 10 text')
+            print('e.g: 10 vis')
             inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Phase3_task1()
