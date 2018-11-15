@@ -14,7 +14,6 @@ class Phase3_task1:
 
         client = MongoClient('localhost', 27017)
         db = client['mwdb']
-        tb = 'imagetext'
 
         if type == 'text':
             data_table = db['img_img_text']
