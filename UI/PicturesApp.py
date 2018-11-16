@@ -7,6 +7,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
+from multiprocessing import Process
 
 class PicturesApp(App):
     def build(self):
@@ -31,7 +32,16 @@ class PicturesApp(App):
         App.__init__(self)
         self.pic_info = p_i
 
+def show_pics(pic_info):
+    ty = PicturesApp(pic_info)
+    ty.run()
+
+def display_images(pic_info):
+    proc1 = Process(target=show_pics, args=(pic_info,))
+    proc1.start()
+    inp = input("To stop Press any key: ")
+    proc1.join()
+
 if __name__ == '__main__':
-    pic_info = []
-    pic_info.append([{'id':'9067739127', 'info':'kool'},{'id':'9067738157', 'info':'kool2'},{'id':'9067739127', 'info':'kool3'},{'id':'9067738157', 'info':'kool2'},{'id':'9067739127', 'info':'kool'},{'id':'9067738157', 'info':'kool2'},{'id':'9067739127', 'info':'kool3'},{'id':'9067738157', 'info':'kool2'}])
+    pic_info = ([{'id':'9067739127', 'info':'kool'},{'id':'9067738157', 'info':'kool2'},{'id':'9067739127', 'info':'kool3'},{'id':'9067738157', 'info':'kool2'},{'id':'9067739127', 'info':'kool'},{'id':'9067738157', 'info':'kool2'},{'id':'9067739127', 'info':'kool3'},{'id':'9067738157', 'info':'kool2'}])
     PicturesApp(pic_info).run()
