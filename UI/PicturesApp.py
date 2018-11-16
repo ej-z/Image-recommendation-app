@@ -40,5 +40,6 @@ class PicturesApp(App):
 
 if __name__ == '__main__':
     pic_info = []
-    pic_info.append({'cluster': 'cluster1', 'data':[{'id':'9067739127', 'info':'kool'},{'id':'9067738157', 'info':'kool2'},{'id':'9067739127', 'info':'kool3'},{'id':'9067738157', 'info':'kool2'},{'id':'9067739127', 'info':'kool'},{'id':'9067738157', 'info':'kool2'},{'id':'9067739127', 'info':'kool3'},{'id':'9067738157', 'info':'kool2'}]})
+    pic_info.append({'cluster': 'cluster1', 'data':[{'id':'10041290516', 'info':'kool'},{'id':'10041384303', 'info':'kool2'},{'id':'9960455216', 'info':'kool3'},{'id':'9960426144', 'info':'kool2'},{'id':'9960411914', 'info':'kool'},{'id':'8557266548', 'info':'kool2'},{'id':'10427997426', 'info':'kool3'},{'id':'10686677944', 'info':'kool2'}]})
     PicturesApp(pic_info).run()
+    print("hello i am running")
