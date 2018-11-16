@@ -26,7 +26,7 @@ class Phase3_task1:
         graph = []
         img_ids = []
         for id in id_table.find({}):
-            img_ids.append(id['image_id'])
+            img_ids.append(str(id['image_id']).rstrip('.0'))
 
 
         for d in data_table.find({}):
