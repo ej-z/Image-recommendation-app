@@ -14,6 +14,7 @@ from os import system
 
 from phase3_task1 import Phase3_task1
 from phase3_task3 import Phase3_task3
+from phase3_task_5ab import Phase3_Task_5ab
 
 
 def print_menu():
@@ -21,7 +22,9 @@ def print_menu():
     print('2. Task 2')
     print('3. Task 3')
     print('4. Task 4')
-    print('5. Task 5')
+    print('5a. Task 5a')
+    print('5b. Task 5b')
+    print('6a. Task 6a')
     print('6. Task 6')
     print('7. Task 7')
     print('8. Load data')
@@ -60,13 +63,19 @@ def main():
             ips = inp.split(' ')
             tasks = Task_3_4()
             tasks.task4('locations', ips[0], ips[1], int(ips[2]), ips[3])
-        elif option == '5':
-            print('TASK 5')
-            print("Sample: PCA 5 1")
-            inp = input("Input: ")
+        elif option == '5a':
+            print('TASK 5a')
+            print("Sample: 5 7")
+            inp = input("Input: <L> <K> ")
             ips = inp.split(' ')
-            tasks = Task_5()
-            tasks.task5('locations', ips[0], int(ips[1]), ips[2])
+            tasks_ = Phase3_Task_5ab()
+            tasks_.task5a(int(ips[0]), int(ips[1]))
+        elif option == '5b':
+            print('TASK 5b')
+            print("Sample: 4268828872 5")
+            inp = input("Input: <Image Id> <t> ")
+            ips = inp.split(' ')
+            tasks_.task5b(int(ips[0]), int(ips[1]))
         elif option == '6':
             print('TASK 6')
             print('Sample: TF-IDF 1')
