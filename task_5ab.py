@@ -3,7 +3,7 @@ from lsh_index import LSH_index
 from pymongo import MongoClient
 from sklearn import metrics
 from sorted_list import sorted_list
-
+from UI import PicturesApp
 class Task_5ab:
     def task4(self, l, k, data):
         self.lsh_index = LSH_index(data, l,k,1.7)
@@ -34,7 +34,7 @@ class Task_5ab:
             data.extend(images)
 
         data = np.asarray(data)
-        self.task4(150, 16, data)
+        self.task4(5, 7, data)
         given_image_index = data_ids.index(float(id))
         res = self.lsh_index.query(data[given_image_index])
         for i in res:
@@ -73,5 +73,13 @@ class Task_5ab:
 
 if __name__ == '__main__':
     tk = Task_5ab()
+    pic_info = ([{'id': '9067739127', 'info': 'kool'}, {'id': '9067738157', 'info': 'kool2'},
+                     {'id': '9067739127', 'info': 'kool3'}, {'id': '9067738157', 'info': 'kool2'},
+                     {'id': '9067739127', 'info': 'kool'}, {'id': '9067738157', 'info': 'kool2'},
+                     {'id': '9067739127', 'info': 'kool3'}, {'id': '9067738157', 'info': 'kool2'}])
+    pk = PicturesApp.PicturesApp(pic_info)
+    pk.run()
+    pk.stop()
     tk.task5(8684212773,5)
+    PicturesApp.PicturesApp(pic_info).run()
 

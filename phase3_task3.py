@@ -1,4 +1,5 @@
 from page_rank_algorithms import PageRanks
+from UI.PicturesApp import PicturesApp
 
 class Phase3_task3:
 
@@ -6,4 +7,12 @@ class Phase3_task3:
 
         pr = PageRanks()
         ranks = pr.page_rank(data)
-        print(ranks.nlargest(k))
+
+        result = ranks.nlargest(k)
+
+        pic_info = []
+
+        for idx, val in result.iteritems():
+            pic_info.append({'id': idx, 'info': idx + ' :'+str(val)})
+
+        PicturesApp(pic_info).run()

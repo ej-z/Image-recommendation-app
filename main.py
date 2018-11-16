@@ -29,7 +29,6 @@ def print_menu():
 
 
 def main():
-    data = []
     while True:
         print_menu()
         option = input("Enter option: ")
@@ -49,11 +48,11 @@ def main():
             tasks.task2(ips[0], ips[1], ips[2], int(ips[3]), ips[4], float(ips[5]))
         elif option == '3':
             print('TASK 3')
-            print('Sample: CM PCA 5 10045579766')
+            print('Sample: 10')
             inp = input("Input: ")
             ips = inp.split(' ')
-            tasks = Task_3_4()
-            tasks.task3('locations', ips[0], ips[1], int(ips[2]), ips[3])
+            tasks = Phase3_task3()
+            tasks.task_3(data, int(ips[0]))
         elif option == '4':
             print('TASK 4')
             print('Sample: CM PCA 5 1')
@@ -102,15 +101,14 @@ def main():
         else:
             print('Incorrect option.')
         input('Press any key to continue...')
-        _ = system('cls')
 
 if __name__ == "__main__":
     #dt = DataLoading('0')
-    #dt.generate_img_text_graph()
-    p1 = Phase3_task1()
-    data = p1.task1(5,'vis')
-    print('done')
-    p3 = Phase3_task3()
-    p3.task_3(data, 10)
+    #dt.generate_img_img_vis_graph()
+    #p1 = Phase3_task1()
+    #data = p1.task1(5,'vis')
+    #print('done')
+    #p3 = Phase3_task3()
+    #p3.task_3(data, 10)
     #Test.test()
     main()
