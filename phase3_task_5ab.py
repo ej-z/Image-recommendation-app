@@ -4,6 +4,9 @@ from pymongo import MongoClient
 from sklearn import metrics
 from sorted_list import sorted_list
 from UI import PicturesApp
+import gc
+from multiprocessing import Process
+
 class Task_5ab:
     def task4(self, l, k, data):
         self.lsh_index = LSH_index(data, l,k,1.7)
@@ -71,11 +74,29 @@ class Task_5ab:
             o = distances.extract()
             print(str(o['id'])+' - '+str(o['distance']))
 
+def show_pics(pic_info):
+    ty = PicturesApp.PicturesApp(pic_info)
+    ty.run()
+
+
 if __name__ == '__main__':
     tk = Task_5ab()
     pic_info = []
     pic_info.append({'cluster': 'cluster1', 'data':[{'id':'10041290516', 'info':'kool'},{'id':'10041384303', 'info':'kool2'},{'id':'9960455216', 'info':'kool3'},{'id':'9960426144', 'info':'kool2'},{'id':'9960411914', 'info':'kool'},{'id':'8557266548', 'info':'kool2'},{'id':'10427997426', 'info':'kool3'},{'id':'10686677944', 'info':'kool2'}]})
-    pk = PicturesApp.PicturesApp(pic_info).run()
+    #fk = PicturesApp.PicturesApp(pic_info)
     tk.task5(4268828872,5)
+    procs = []
+    proc1 = Process(target=show_pics, args=(pic_info,))
+    proc2 = Process(target=show_pics, args=(pic_info,))
+    procs.append(proc1)
+    procs.append(proc2)
+    for pro in procs:
+        # to start call start method
+        pro.start()
+        inp = input("To stop Press any key: ")
+        #to Terminate call join
+        pro.join()
+    tk.task5(4268828872,5)
+
 
 
