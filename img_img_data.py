@@ -20,4 +20,4 @@ class Img_Img_Data:
         self.graph = g
         self.k = k
 
-        self.print_graph(ids, g, k)
+        #self.print_graph(ids, g, k)

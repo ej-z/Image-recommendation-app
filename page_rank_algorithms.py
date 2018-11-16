@@ -21,7 +21,10 @@ class PageRanks:
             old = new.copy()
             new = A * new
 
-        l_s = pd.Series(new/float(sum(new)), index=data.img_ids)
+        final_ranks = np.zeros(n)
+        for i in range(n):
+            final_ranks[i] = new[i][0]
+        l_s = pd.Series(final_ranks/float(sum(final_ranks)), index=data.img_ids)
         return pd.Series.sort_values(l_s, ascending=False)
 
 

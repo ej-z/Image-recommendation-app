@@ -228,7 +228,7 @@ class DataLoading:
             for idx, model in enumerate(models):
                 each_loc_model_table = db[loc['title']].find({"model":model})[0]
                 images_with_ids = np.array(each_loc_model_table['data'])
-                images_with_ids = images_with_ids.astype(np.float)
+                #images_with_ids = images_with_ids.astype(np.float)
                 if idx == 0:
                     image_ids.extend(images_with_ids[:, 0])
                     images.extend(images_with_ids[:, 1:])
@@ -250,7 +250,7 @@ class DataLoading:
             distances = []
             for j in range(len(euc_distances)):
                 distances.append({'id': j, 'dist': euc_distances[i][j]})
-            sorted(distances, key=lambda k: k['dist'])
+            distances.sort(key=lambda k: k['dist'])
             db[img_img_tb].insert({'id': i, 'data': distances})
             db[img_id_tb].insert({'id': i, 'image_id': image_ids[i]})
 
