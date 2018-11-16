@@ -23,7 +23,10 @@ class LSH_index:
             self.random_proj_vectors.append([])
             for j in range(k):
                 self.random_proj_vectors[i].append([])
-                vector = np.random.normal(0,1,c)
+                vector = []
+                for t in range(c):
+                    vector.extend(np.random.normal(0,1,1))
+               # vector = np.asarray(vector)
                 vector_hat = vector/np.linalg.norm(vector)
                 self.random_proj_vectors[i][j].extend(vector_hat)
         self.random_proj_vectors = np.asarray(self.random_proj_vectors)

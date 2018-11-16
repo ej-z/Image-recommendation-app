@@ -3,7 +3,7 @@ pymongo
 numpy
 sklearn
 requests
-operator
 pandas
 tensorly
 matplotlib
+kivy

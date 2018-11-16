@@ -34,7 +34,7 @@ class Task_5ab:
             data.extend(images)
 
         data = np.asarray(data)
-        self.task4(5, 7, data)
+        self.task4(7, 5, data)
         given_image_index = data_ids.index(float(id))
         res = self.lsh_index.query(data[given_image_index])
         for i in res:
@@ -45,20 +45,20 @@ class Task_5ab:
             print("value =",np.linalg.norm(data[i]-data[given_image_index]))
 
         ''' To Rank them in order '''
-        distances = sorted_list(30, 'distance', True)
+        distances = sorted_list(len(res)-2, 'distance', True)
         for i in res:
             distances.add({'id': data_ids[i], 'distance': np.linalg.norm(data[i]-data[given_image_index])})
         print('Total considered images= ',len(res))
         print('Top 5 similar images and similarity score using LSH')
         print()
-        for i in range(0,30):
+        for i in range(0,len(res)-2):
             o = distances.extract()
             print(str(o['id'])+' - '+str(o['distance']))
 
         '''To delete'''
         s_mat = [data[given_image_index]]
 
-        distances = sorted_list(30, 'distance', True)
+        distances = sorted_list(len(res)-2, 'distance', True)
 
         euc_distance = metrics.euclidean_distances(s_mat,data)
         # euc_distance = metrics.euclidean_distances([self.images[given_image_index]],self.images)
@@ -67,19 +67,15 @@ class Task_5ab:
 
         print('Top 5 similar images and similarity score for validation purpose')
         print()
-        for i in range(0,30):
+        for i in range(0,len(res)-2):
             o = distances.extract()
             print(str(o['id'])+' - '+str(o['distance']))
 
 if __name__ == '__main__':
     tk = Task_5ab()
-    pic_info = ([{'id': '9067739127', 'info': 'kool'}, {'id': '9067738157', 'info': 'kool2'},
-                     {'id': '9067739127', 'info': 'kool3'}, {'id': '9067738157', 'info': 'kool2'},
-                     {'id': '9067739127', 'info': 'kool'}, {'id': '9067738157', 'info': 'kool2'},
-                     {'id': '9067739127', 'info': 'kool3'}, {'id': '9067738157', 'info': 'kool2'}])
-    pk = PicturesApp.PicturesApp(pic_info)
-    pk.run()
-    pk.stop()
-    tk.task5(8684212773,5)
-    PicturesApp.PicturesApp(pic_info).run()
+    pic_info = []
+    pic_info.append({'cluster': 'cluster1', 'data':[{'id':'10041290516', 'info':'kool'},{'id':'10041384303', 'info':'kool2'},{'id':'9960455216', 'info':'kool3'},{'id':'9960426144', 'info':'kool2'},{'id':'9960411914', 'info':'kool'},{'id':'8557266548', 'info':'kool2'},{'id':'10427997426', 'info':'kool3'},{'id':'10686677944', 'info':'kool2'}]})
+    pk = PicturesApp.PicturesApp(pic_info).run()
+    tk.task5(4268828872,5)
+
 
