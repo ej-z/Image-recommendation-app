@@ -27,15 +27,17 @@ class PageRanks:
         l_s = pd.Series(final_ranks, index=data.img_ids)
         return pd.Series.sort_values(l_s, ascending=False)
         '''
-        old, new = np.zeros(n), np.zeros(n)
-        new[0] = 1
+        old, new = np.zeros((1, n)), np.zeros((1, n))
+        new[0][0] = 1
         iter = 0
         while iter < 100 and not np.array_equal(old, new):
             old = new.copy()
             new = np.matmul(new, A)
             iter = iter + 1
-            
-        l_s = pd.Series(new/float(sum(new)), index=data.img_ids)
+        final_ranks = np.zeros(n)
+        for i in range(n):
+            final_ranks[i] = new[0, i]
+        l_s = pd.Series(final_ranks, index=data.img_ids)
         return pd.Series.sort_values(l_s, ascending=False)
 
 

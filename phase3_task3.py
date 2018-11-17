@@ -1,5 +1,5 @@
 from page_rank_algorithms import PageRanks
-from UI.PicturesApp import PicturesApp
+import UI.PicturesApp as PA
 
 class Phase3_task3:
 
@@ -15,4 +15,4 @@ class Phase3_task3:
         for idx, val in result.iteritems():
             pic_info.append({'id': idx, 'info': idx + ' :'+str(val)})
 
-        PicturesApp(pic_info).run()
+        PA.display_images(pic_info)
