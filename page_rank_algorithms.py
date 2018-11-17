@@ -10,11 +10,13 @@ class PageRanks:
         n = len(data.img_ids)
         M = self._process_data(data)
         E = np.zeros((n, n))
-        dp = 1/n
+
         #TODO: presonalization should come into effect here, I think.
+        alpha = 0.85
+        dp = (1 - alpha) / n
         E[:] = dp
-        d = 0.85
-        A = d * M + ((1 - d) * E)
+        A = (alpha * M) + E
+
         '''
         w, v = np.linalg.eig(A.T)
         left_vec = v[:, w.argmax()]
@@ -25,16 +27,15 @@ class PageRanks:
         l_s = pd.Series(final_ranks, index=data.img_ids)
         return pd.Series.sort_values(l_s, ascending=False)
         '''
-        old, new = np.zeros(shape=(n, 1)), np.zeros(shape=(n, 1))
-        new[:] = dp
-        while abs(sum(old)-sum(new)) != 0:
+        old, new = np.zeros(n), np.zeros(n)
+        new[0] = 1
+        iter = 0
+        while iter < 100 and not np.array_equal(old, new):
             old = new.copy()
-            new = A * new
-
-        final_ranks = np.zeros(n)
-        for i in range(n):
-            final_ranks[i] = new[i][0]
-        l_s = pd.Series(final_ranks/float(sum(final_ranks)), index=data.img_ids)
+            new = np.matmul(new, A)
+            iter = iter + 1
+            
+        l_s = pd.Series(new/float(sum(new)), index=data.img_ids)
         return pd.Series.sort_values(l_s, ascending=False)
 
 
