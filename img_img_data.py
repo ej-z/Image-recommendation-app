@@ -21,8 +21,8 @@ class Img_Img_Data:
         self.graph = g
         self.k = k
         n = len(ids)
-        self.adjacency_mat = sparse.lil_matrix((n, n), dtype=int)
-        self.degree_mat = sparse.lil_matrix((n, n), dtype=int)
+        self.adjacency_mat = sparse.lil_matrix((n, n), dtype=float)
+        self.degree_mat = sparse.lil_matrix((n, n), dtype=float)
         for i in range(n):
             for j in range(k):
                 x = g[i][j]
