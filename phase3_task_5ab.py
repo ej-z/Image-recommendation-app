@@ -41,7 +41,7 @@ class Phase3_Task_5ab:
         self.data+=min
         print("shape here buddy",self.data.shape)
         #self.lsh_index = LSH_index(self.data, l,k,2000)
-        self.lsh_index = LSH_index(self.data, l,k,40)
+        self.lsh_index = LSH_index(self.data, l,k,3)
 
     def task5b(self, id, t):
         given_image_index = self.data_ids.index(float(id))
