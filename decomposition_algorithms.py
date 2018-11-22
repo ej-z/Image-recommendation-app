@@ -24,7 +24,7 @@ class Decomposition:
             raise Exception('Unrecognized algorithm '+algorithm)
 
         self.decomposed_data = model.fit_transform(_data)
-
+        print(sum(model.explained_variance_ratio_[:400]))
         self.loading_scores = []
         for i in range(0, k):
             if algorithm != 'LDA':

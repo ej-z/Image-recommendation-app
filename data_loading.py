@@ -8,7 +8,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from operator import itemgetter
 from sklearn.metrics.pairwise import euclidean_distances
-
+from decomposition_algorithms import Decomposition
 
 class DataLoading:
 
@@ -238,8 +238,8 @@ class DataLoading:
 
         data = np.asarray(data)
         print('data shape', data.shape)
-
-        euc_distances = euclidean_distances(data, data)
+        pca = Decomposition(data, 400, 'PCA', [], scale=True)
+        euc_distances = euclidean_distances(pca.decomposed_data, pca.decomposed_data)
         euc_distances = np.asarray(euc_distances)
         print('distance matrix shape', euc_distances.shape)
 
@@ -251,7 +251,7 @@ class DataLoading:
             for j in range(len(euc_distances)):
                 distances.append({'id': j, 'dist': euc_distances[i][j]})
             distances.sort(key=lambda k: k['dist'])
-            db[img_img_tb].insert({'id': i, 'data': distances})
+            db[img_img_tb].insert({'id': i, 'data': [{'id': d['id']} for d in distances]})
             db[img_id_tb].insert({'id': i, 'image_id': image_ids[i]})
 
     def __init__(self, p):
