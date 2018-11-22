@@ -251,7 +251,8 @@ class DataLoading:
             for j in range(len(euc_distances)):
                 distances.append({'id': j, 'dist': euc_distances[i][j]})
             distances.sort(key=lambda k: k['dist'])
-            db[img_img_tb].insert({'id': i, 'data': [{'id': d['id']} for d in distances]})
+            #db[img_img_tb].insert({'id': i, 'data': [{'id': d['id']} for d in distances]})
+            db[img_img_tb].insert({'data': [d['id'] for d in distances]})
             db[img_id_tb].insert({'id': i, 'image_id': image_ids[i]})
 
     def __init__(self, p):
