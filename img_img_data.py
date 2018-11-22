@@ -1,3 +1,5 @@
+from scipy import sparse
+
 class Img_Img_Data:
 
     def print_graph(self, ids, graph, k):
@@ -6,9 +8,8 @@ class Img_Img_Data:
             image_id = ids[index]
             file.write(str(image_id) + " = {")
             for img in g:
-                id = ids[img['id']]
-                dist = img['dist']
-                file.write(str(id) + " : " + str(dist) + "; ")
+                id = ids[img]
+                file.write(str(id) + "; ")
             file.write(" }\n")
             # if index > 0:
             #     break
@@ -19,5 +20,13 @@ class Img_Img_Data:
         self.img_ids = ids
         self.graph = g
         self.k = k
+        n = len(ids)
+        self.adjacency_mat = sparse.lil_matrix((n, n), dtype=int)
+        self.degree_mat = sparse.lil_matrix((n, n), dtype=int)
+        for i in range(n):
+            for j in range(k):
+                x = g[i][j]
+                self.adjacency_mat[i, x] = 1
+                self.degree_mat[x, x] = self.degree_mat[x, x] + 1
 
-        self.print_graph(ids, g, k)
+        #self.print_graph(ids, g, k)

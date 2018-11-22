@@ -10,18 +10,13 @@ from img_img_data import Img_Img_Data
 
 
 class Phase3_task1:
-    def task1(self, k, type):
+    def task1(self, k):
 
         client = MongoClient('localhost', 27017)
         db = client['mwdb']
 
-        if type == 'text':
-            data_table = db['img_img_text']
-            id_table = db['imagetext']
-            return
-        else:
-            data_table = db['image_image_vis']
-            id_table = db['image_id_vis']
+        data_table = db['image_image_vis']
+        id_table = db['image_id_vis']
 
         graph = []
         img_ids = []
@@ -31,7 +26,7 @@ class Phase3_task1:
 
 
         for d in data_table.find({}):
-            graph.append(d['data'][:k+1])
+            graph.append(d['data'][:k])
 
         return Img_Img_Data(img_ids, graph, k)
 

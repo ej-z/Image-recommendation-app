@@ -37,11 +37,11 @@ def main():
         option = input("Enter option: ")
         if option == '1':
             print('TASK 1')
-            print('e.g: 10 vis')
+            print('e.g: 10')
             inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Phase3_task1()
-            data = tasks.task1(int(ips[0]), ips[1])
+            data = tasks.task1(int(ips[0]))
         elif option == '2':
             print('TASK 2')
             print('e.g: usertext TF-IDF PCA 20 10117222@N04 0.05')
