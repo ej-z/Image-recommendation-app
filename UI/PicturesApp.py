@@ -16,7 +16,9 @@ class PicturesApp(App):
         db = client['mwdb']
         table = db['LIU_commonterms']
         tile_layout = GridLayout(cols=3)
-        for d in self.pic_info:
+        for index, d in enumerate(self.pic_info):
+            if index == 30:
+                break
             t = table.find_one({'image': d['id']})
             if t is not None:
                 inner_layout = BoxLayout(orientation='vertical')

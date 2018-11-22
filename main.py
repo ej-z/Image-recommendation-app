@@ -23,7 +23,7 @@ def print_menu():
     print('3. Task 3')
     print('4. Task 4')
     print('5a. Task 5a')
-    print('5b. Task 5b')
+    print('5b. Task 5b  RUN 5a before this to build index structure')
     print('6a. Task 6a')
     print('6. Task 6')
     print('7. Task 7')
