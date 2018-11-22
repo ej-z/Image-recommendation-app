@@ -4,13 +4,15 @@ from pymongo import MongoClient
 from sklearn import metrics
 from sorted_list import sorted_list
 import UI.PicturesApp as PA
-
+from decomposition_algorithms import Decomposition
 
 class Phase3_Task_5ab:
     def task5a(self, l, k, data=[]):
         client = MongoClient('localhost', 27017)
         db = client['mwdb']
-        models = ['CM3x3', 'CN3x3', 'LBP3x3', 'GLRLM3x3' ]
+        #models = ['CM3x3', 'CN3x3', 'LBP3x3', 'GLRLM3x3' ]
+        #models = ['CM3x3', 'CN3x3', 'CSD', 'GLRLM3x3', 'HOG', 'LBP']
+        models = ['CM', 'CM3x3', 'CN', 'CN3x3', 'CSD', 'GLRLM', 'GLRLM3x3', 'HOG', 'LBP', 'LBP3x3']
         locations_table = db["locations"].find({})
         data = []
         data_ids = []
@@ -33,11 +35,19 @@ class Phase3_Task_5ab:
             data.extend(images)
         self.data_ids = data_ids
         self.data = np.asarray(data)
-        self.lsh_index = LSH_index(self.data, l,k,2000)
+        decomposition = Decomposition(self.data, 400, 'PCA', [], True)
+        self.data = decomposition.decomposed_data
+        min = np.amin(self.data)
+        self.data+=min
+        print("shape here buddy",self.data.shape)
+        #self.lsh_index = LSH_index(self.data, l,k,2000)
+        self.lsh_index = LSH_index(self.data, l,k,40)
 
     def task5b(self, id, t):
         given_image_index = self.data_ids.index(float(id))
         res = self.lsh_index.query(self.data[given_image_index])
+        print('With repetition Overall considered images= ',len(res))
+        res = set(res)
         for i in res:
             #print("data_result", data[i])
            # print("given_image", data[given_image_index])
@@ -50,7 +60,7 @@ class Phase3_Task_5ab:
         distances = sorted_list(t, 'distance', True)
         for i in res:
             distances.add({'id': self.data_ids[i], 'distance': np.linalg.norm(self.data[i]-self.data[given_image_index])})
-        print('Total considered images= ',len(res))
+        print('Total unique considered images= ',len(res))
         print('Top 5 similar images and similarity score using LSH')
         print()
         pic_info = []

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import heapq
 from sklearn.utils import shuffle
 
-class knn:
+class KNN:
     def __init__(self):
         pass
 
@@ -12,17 +12,13 @@ class knn:
         self.Y = Y
 
     def find_k_nearest_friends(self, X_test, K):
-        # values (priority, task)
+        # values (priority, task) min heap
         k_neigbours = []
         for i in range(len(self.X)):
-            # To be changed to cosine if found text as input and should be made max heap
             val = np.sqrt(np.sum(np.square(X_test-self.X[i,:])))
             if len(k_neigbours)>= K:
                 del k_neigbours[K-1]
-                #heapq._heapify_max(k_neigbours)
             heapq.heappush(k_neigbours, (val, i))
-            #for maxheap
-            #heapq._heapify_max(k_neigbours)
 
         class_dict = {}
         for i in range(K):

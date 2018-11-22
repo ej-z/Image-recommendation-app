@@ -30,27 +30,30 @@ class LSH_index:
                 vector_hat = vector/np.linalg.norm(vector)
                 self.random_proj_vectors[i][j].extend(vector_hat)
         self.random_proj_vectors = np.asarray(self.random_proj_vectors)
-
+        yu = 0.0
         for i in range(n):
             for j in range(l):
                 key = ""
                 for f in range(k):
                     #rv_hat = self.random_vectors[j][f]
-                    #print((np.dot(self.random_proj_vectors[j][f], self._data[i]) + self.shifts[j][f]))
+                    val = (np.dot(self.random_proj_vectors[j][f], self._data[i]))
+                    yu+=abs(val)
+                    print(val)
                     key+=("," + (str(math.floor((np.dot(self.random_proj_vectors[j][f], self._data[i]) + self.shifts[j][f]) / self.w))))
                     print("hash=",key)
                 if key not in self.dict_arr[j]:
-                    self.dict_arr[j][key] = set()
-                self.dict_arr[j][key].add(i)
+                    self.dict_arr[j][key] = []
+                self.dict_arr[j][key].append(i)
+        print("diameter",yu/(n*l*k))
 
     def query(self, q):
-        index_res = set()
+        index_res = []
         for j in range(self.layers):
             key = ""
             for f in range(self.k):
                 key+=("," + (str(math.floor((np.dot(self.random_proj_vectors[j][f], q) + self.shifts[j][f]) / self.w))))
-            print("unique data in single layer",self.dict_arr[j][key])
-            index_res.update(self.dict_arr[j][key])
+            print("all data in single layer unique",self.dict_arr[j][key])
+            index_res.extend(self.dict_arr[j][key])
         return index_res
 
 
