@@ -15,7 +15,7 @@ from os import system
 from phase3_task1 import Phase3_task1
 from phase3_task3 import Phase3_task3
 from phase3_task_5ab import Phase3_Task_5ab
-
+from phase3_task6a import Phase3_Task_6a
 
 def print_menu():
     print('1. Task 1')
@@ -76,15 +76,12 @@ def main():
             inp = input("Input: <Image Id> <t> ")
             ips = inp.split(' ')
             tasks_.task5b(int(ips[0]), int(ips[1]))
-        elif option == '6':
-            print('TASK 6')
-            print('Sample: TF-IDF 1')
-            inp = input('Input: ')
-            ips = inp.split(' ')
-            if len(ips[0]) == 0:
-                ips[0] = 'TF-IDF'
-            tasks = Task_6()
-            tasks.task6('loctext', ips[0], 'SVD', int(ips[1]))
+        elif option == '6a':
+            print('TASK 6a')
+            print('Sample: task6.txt')
+            inp = input('Input: <filename>')
+            tasks = Phase3_Task_6a()
+            tasks.task6a(inp)
         elif option == '7':
             print('TASK 7')
             print("Sample: 5")

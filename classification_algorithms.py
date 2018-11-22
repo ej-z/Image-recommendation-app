@@ -36,6 +36,31 @@ class KNN:
         return max_key
 
 
+class WeightedKNN:
+    def __init__(self):
+        pass
+
+    def train_model(self, X, Y):
+        self.X = X
+        self.Y = Y
+
+    def find_k_nearest_friends(self, X_test):
+        class_dict = {}
+        for i in range(len(self.X)):
+            val = np.sum(np.square(X_test-self.X[i,:]))
+            class_dict[self.Y[i]] = class_dict.get(self.Y[i], 0.0)+(1/val)
+        return class_dict
+
+    def classify_me(self, X_test):
+        class_dict = self.find_k_nearest_friends(X_test)
+        max_val = -1.0
+        max_key = -1.0
+        for key, val in class_dict.items():
+            if val > max_val:
+                max_val = val
+                max_key = key
+        return max_key
+
 
 
 

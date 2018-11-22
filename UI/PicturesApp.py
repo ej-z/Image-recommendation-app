@@ -17,7 +17,6 @@ class PicturesApp(App):
         table = db['LIU_commonterms']
         tile_layout = GridLayout(cols=3)
         for d in self.pic_info:
-            print(d['id'])
             t = table.find_one({'image': d['id']})
             if t is not None:
                 inner_layout = BoxLayout(orientation='vertical')
@@ -39,7 +38,7 @@ def show_pics(pic_info):
 def display_images(pic_info):
     proc1 = Process(target=show_pics, args=(pic_info,))
     proc1.start()
-    inp = input("To stop Press any key: ")
+    print("Close the pic window to resume the application")
     proc1.join()
 
 if __name__ == '__main__':
