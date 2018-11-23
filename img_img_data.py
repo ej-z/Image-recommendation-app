@@ -1,4 +1,5 @@
 from scipy import sparse
+import numpy as np
 
 class Img_Img_Data:
 
@@ -22,11 +23,11 @@ class Img_Img_Data:
         self.k = k
         n = len(ids)
         self.adjacency_mat = sparse.lil_matrix((n, n), dtype=float)
-        self.degree_mat = sparse.lil_matrix((n, n), dtype=float)
+        self.degree_mat = np.zeros(n)
         for i in range(n):
             for j in range(k):
                 x = g[i][j]
                 self.adjacency_mat[i, x] = 1
-                self.degree_mat[x, x] = self.degree_mat[x, x] + 1
+                self.degree_mat[x] = self.degree_mat[x] + 1
 
         #self.print_graph(ids, g, k)

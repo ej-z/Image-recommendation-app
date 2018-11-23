@@ -13,13 +13,15 @@ from data_loading import DataLoading
 from os import system
 
 from phase3_task1 import Phase3_task1
+from phase3_task2 import Phase3_task2
 from phase3_task3 import Phase3_task3
 from phase3_task_5ab import Phase3_Task_5ab
 from phase3_task6a import Phase3_Task_6a
 
 def print_menu():
     print('1. Task 1')
-    print('2. Task 2')
+    print('2a. Task 2a')
+    print('2b. Task 2b')
     print('3. Task 3')
     print('4. Task 4')
     print('5a. Task 5a')
@@ -42,13 +44,13 @@ def main():
             ips = inp.split(' ')
             tasks = Phase3_task1()
             data = tasks.task1(int(ips[0]))
-        elif option == '2':
-            print('TASK 2')
-            print('e.g: usertext TF-IDF PCA 20 10117222@N04 0.05')
+        elif option == '2a':
+            print('TASK 2a - Spectral clustering')
+            print('e.g: 5')
             inp = input("Input: ")
             ips = inp.split(' ')
-            tasks = Task_1_2()
-            tasks.task2(ips[0], ips[1], ips[2], int(ips[3]), ips[4], float(ips[5]))
+            tasks = Phase3_task2()
+            tasks.task_2a(data, int(ips[0]))
         elif option == '3':
             print('TASK 3')
             print('Sample: 10')
