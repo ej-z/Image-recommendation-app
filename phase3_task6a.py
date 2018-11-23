@@ -2,7 +2,7 @@ import numpy as np
 from pymongo import MongoClient
 from sklearn import metrics
 from sorted_list import sorted_list
-import UI.PicturesApp as PA
+import UI.HTMLPicGallery as PA
 from decomposition_algorithms import Decomposition
 from classification_algorithms import WeightedKNN
 

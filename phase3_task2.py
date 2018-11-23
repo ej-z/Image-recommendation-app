@@ -1,5 +1,5 @@
 from clustering_algorithms import Clustering_Algorithms
-import UI.PicturesApp as PA
+import UI.HTMLPicGallery as PA
 
 class Phase3_task2:
 
@@ -14,5 +14,4 @@ class Phase3_task2:
             clusters[labels[i]].append({'id': data.img_ids[i], 'info': ''})
 
         for i in range(c):
-            print(len(clusters[i]))
             PA.display_images(clusters[i])

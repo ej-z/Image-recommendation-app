@@ -3,7 +3,7 @@ from lsh_index import LSH_index
 from pymongo import MongoClient
 from sklearn import metrics
 from sorted_list import sorted_list
-import UI.PicturesApp as PA
+import UI.HTMLPicGallery as PA
 from decomposition_algorithms import Decomposition
 
 class Phase3_Task_5ab:
