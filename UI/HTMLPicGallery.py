@@ -2,19 +2,22 @@ from pymongo import MongoClient
 import uuid
 import webbrowser
 import os
+from threading import Timer
 
-
-def display_images(title, pic_info):
-    html = _build_html(title, pic_info)
+def display_images(pic_info, title=''):
+    html = _build_html(pic_info,title)
     filename = uuid.uuid4().hex+".html"
     text_file = open(filename, "w")
     text_file.write(html)
     text_file.close()
-    print(os.path.realpath(filename))
     webbrowser.get().open('file://' + os.path.realpath(filename))
+    t = Timer(15.0, _remove_file, args=[filename])
+    t.start()
+
+def _remove_file(filename):
     os.remove(filename)
 
-def _build_html(title, pic_info):
+def _build_html(pic_info, title):
 
     top = '''<!DOCTYPE html>
 <html>
