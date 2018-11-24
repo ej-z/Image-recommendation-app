@@ -75,6 +75,9 @@ class Clustering_Algorithms:
                 C[biggest_cluster_index] = np.mean(list1, axis=0)
                 C[empty_cluster_index] = np.mean(list2, axis=0)
             change_in_centroid = self.euclidean_distance(C, C_previous, None)
+
+        clusters = clusters.astype(np.int)
+        clusters = clusters.tolist()
         return clusters
 
     def euclidean_distance(self, x, y, along=1):

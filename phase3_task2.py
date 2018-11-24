@@ -1,6 +1,5 @@
 from clustering_algorithms import Clustering_Algorithms
 import UI.HTMLPicGallery as PA
-import numpy as np
 
 class Phase3_task2:
 
@@ -8,8 +7,6 @@ class Phase3_task2:
 
         c_a = Clustering_Algorithms()
         labels = c_a.spectral_clustering(data, c)
-        labels = labels.astype(np.int)
-        labels = labels.tolist()
         clusters = [[] for _ in range(c)]
 
         for i in range(len(labels)):
