@@ -35,14 +35,15 @@ class Phase3_Task_5ab:
         decomposition = Decomposition(self.data, 400, 'PCA', [], True)
         self.data = decomposition.decomposed_data
         min = np.amin(self.data)
-        self.data+=min
-        self.lsh_index = LSHIndex(self.data, l, k, 4)
+        self.data+=abs(min)
+        self.lsh_index = LSHIndex(self.data, l, k, 28)
 
     def task5b(self, id, t):
         given_image_index = self.data_ids.index(float(id))
         res = self.lsh_index.query(self.data[given_image_index])
         print('With repetition Overall considered images= ',len(res))
         res = set(res)
+        print('Total unique considered images= ',len(res))
         '''
         for i in res:
             print("index =",i)
@@ -53,8 +54,9 @@ class Phase3_Task_5ab:
         ''' To Rank them in order '''
         distances = sorted_list(t, 'distance', True)
         for i in res:
-            distances.add({'id': self.data_ids[i], 'distance': np.linalg.norm(self.data[i]-self.data[given_image_index])})
-        print('Total unique considered images= ',len(res))
+            dist = np.linalg.norm(self.data[i]-self.data[given_image_index])
+            distances.add({'id': self.data_ids[i], 'distance': dist})
+
         print('Top 5 similar images and similarity score using LSH')
         print()
         pic_info = []
@@ -67,7 +69,7 @@ class Phase3_Task_5ab:
 
 
         '''To delete'''
-'''     s_mat = [self.data[given_image_index]]
+'''        s_mat = [self.data[given_image_index]]
         distances = sorted_list(t, 'distance', True)
         euc_distance = metrics.euclidean_distances(s_mat,self.data)
         # euc_distance = metrics.euclidean_distances([self.images[given_image_index]],self.images)

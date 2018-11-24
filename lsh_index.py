@@ -34,16 +34,15 @@ class LSHIndex:
             for j in range(l):
                 key = ""
                 for f in range(k):
-                    #rv_hat = self.random_vectors[j][f]
                     #val = (np.dot(self.random_proj_vectors[j][f], self._data[i]))
                     #yu+=abs(val)
                     #print(val)
                     key+=("," + (str(math.floor((np.dot(self.random_proj_vectors[j][f], self._data[i]) + self.shifts[j][f]) / self.w))))
-                    #print("hash=",key)
+                print("hash=",key)
                 if key not in self.dict_arr[j]:
                     self.dict_arr[j][key] = []
                 self.dict_arr[j][key].append(i)
-        #print("diameter",yu/(n*l*k))
+        print("diameter",yu/(n*l*k))
 
     def query(self, q):
         index_res = []
