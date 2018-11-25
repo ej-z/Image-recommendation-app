@@ -42,7 +42,7 @@ class PageRanks:
 
         return M
 
-    def personalized_page_rank(self, data, query_imgs):
+    def personalized_page_rank(self, data, query_imgs, sort = True):
 
         n = len(data.img_ids)
 
@@ -67,4 +67,7 @@ class PageRanks:
         for i in range(n):
             final_ranks[i] = new[0, i]
         l_s = pd.Series(final_ranks, index=data.img_ids)
+
+        if not sort:
+            return l_s
         return pd.Series.sort_values(l_s, ascending=False)
