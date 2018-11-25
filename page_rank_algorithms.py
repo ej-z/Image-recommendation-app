@@ -47,24 +47,21 @@ class PageRanks:
         n = len(data.img_ids)
 
         R = data.adjacency_mat/data.k   #row-normalization
+        R = R.T
         V = np.zeros((1,n))
 
         for img in query_imgs:
             idx = data.img_ids.index(img)
-            print(idx)
             V[0][idx] = 1/len(query_imgs)
 
         alpha = 0.15
         old = np.zeros((1, n))
         new = V
-        term1 = (1-alpha) * R.todense()
-        print('old shape', np.shape(old))
-        print('term1 shape', np.shape(term1))
+        A = R.todense()
         iter = 0
         while iter < 100 and not np.array_equal(old, new):
             old = new.copy()
-            # print(np.shape(new))
-            new = np.matmul(new, term1) + (alpha * V)
+            new = ((1-alpha) * np.matmul(new, A)) + (alpha * V)
             iter = iter + 1
         final_ranks = np.zeros(n)
         for i in range(n):

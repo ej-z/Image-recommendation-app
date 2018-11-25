@@ -62,11 +62,11 @@ def main():
             tasks.task_3(data, int(ips[0]))
         elif option == '4':
             print('TASK 4')
-            print('Sample: 10')
+            print('Sample: 10 2976144 3172496917 2614355710')
             inp = input("Input: ")
             ips = inp.split(' ')
             tasks = Phase3_task4()
-            tasks.task_4(data, int(ips[0]))
+            tasks.task_4(data, int(ips[0]), [ips[1], ips[2], ips[3]])
         elif option == '5a':
             print('TASK 5a')
             print("Sample: 5 7")
