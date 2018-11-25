@@ -22,6 +22,7 @@ def _build_html(pic_info, title):
     top = '''<!DOCTYPE html>
 <html>
 <head>
+<title>'''+title+'''</title>
 <style>
 div.gallery {
     margin: 5px;

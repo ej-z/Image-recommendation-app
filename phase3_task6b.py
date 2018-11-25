@@ -38,7 +38,7 @@ class Phase3_Task_6b:
                     lables.append(pagelables[j])
             pic_info.append({'id': str(data.img_ids[i]), 'info': str(data.img_ids[i])+" : "+",".join(lables)})
 
-        PA.display_images(pic_info)
+        PA.display_images(pic_info, 'Task 6b - '+str(fileName))
 
 
 

@@ -36,7 +36,7 @@ class Phase3_Task_5ab:
         self.data = decomposition.decomposed_data
         min = np.amin(self.data)
         self.data+=abs(min)
-        self.lsh_index = LSHIndex(self.data, l, k, 28)
+        self.lsh_index = LSHIndex(self.data, l, k, 15)
 
     def task5b(self, id, t):
         given_image_index = self.data_ids.index(float(id))
@@ -65,7 +65,7 @@ class Phase3_Task_5ab:
             o = distances.extract()
             print(str(int(o['id']))+' - '+str(o['distance']))
             pic_info.append({'id': str(int(o['id'])), 'info': str(int(o['id']))})
-        PA.display_images(pic_info)
+        PA.display_images(pic_info, 'Task 5b - '+str(id)+' - '+str(t))
 
 
         '''To delete'''

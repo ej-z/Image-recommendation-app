@@ -81,7 +81,7 @@ class Phase3_Task_6a:
         total = 0
         for key in self.cluster_dict:
             pic_info = [{'id': str(int(id)), 'info': str(int(id))+"  "+key} for id in self.cluster_dict[key]]
-            PA.display_images(pic_info)
+            PA.display_images(pic_info, 'Task 6a - '+str(fileName))
             #print(pic_info)
             print("cluster name=", key)
             print("images in this cluster= ", self.cluster_dict[key])

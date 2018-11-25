@@ -14,4 +14,4 @@ class Phase3_task2:
 
         for i in range(c):
             print(len(clusters[i]))
-            PA.display_images(clusters[i])
+            PA.display_images(clusters[i], 'Task 2a - '+str(c))
