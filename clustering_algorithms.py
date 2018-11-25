@@ -1,4 +1,5 @@
 from scipy import sparse
+from scipy import linalg
 import numpy as np
 import math
 from sklearn.cluster import KMeans
@@ -83,3 +84,36 @@ class Clustering_Algorithms:
     def euclidean_distance(self, x, y, along=1):
         # return scipy.spatial.distance.cdist(x,y,'euclidean')
         return np.linalg.norm(x - y, axis=along)
+
+
+    def clustering_2(self, data, n_clusters):
+
+        n = len(data.img_ids)
+        W = data.adjacency_mat
+        D = sparse.lil_matrix( np.diag(data.degree_mat) )
+        A = D - W
+        A = A
+
+        eig_val, eig_vec = sparse.linalg.eigsh(A, 2, sigma = 0, which = 'LM')
+        # eig_val, eig_vec =  np.linalg.eig(A)
+        # eig_val, eig_vec = linalg.eig(A)
+
+        print(eig_val.shape)
+
+        min_idx = 0
+        min_val = 0
+
+        for idx, e in enumerate(eig_val):
+            if e < min_val:
+                min_idx = idx
+                min_val = e
+
+        y = eig_vec[min_idx]
+
+        yT = y.T
+
+        Norma_cut_cost = np.matmul()
+
+
+
+

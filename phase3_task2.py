@@ -15,3 +15,8 @@ class Phase3_task2:
         for i in range(c):
             print(len(clusters[i]))
             PA.display_images(clusters[i])
+
+    def task_2b(self, data, c):
+
+        c_a = Clustering_Algorithms()
+        c_a.clustering_2(data, c)
