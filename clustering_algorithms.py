@@ -4,6 +4,8 @@ import numpy as np
 import math
 from sklearn.cluster import KMeans
 import copy
+import pickle as pi
+import os
 
 class Clustering_Algorithms:
 
@@ -85,128 +87,80 @@ class Clustering_Algorithms:
         # return scipy.spatial.distance.cdist(x,y,'euclidean')
         return np.linalg.norm(x - y, axis=along)
 
-
-    def clustering_2(self, data, n_clusters):
-
-        n = len(data.img_ids)
-
-        laplacian = sparse.csc_matrix((n, n), dtype=float)
-
-        # Symmetric normalized Laplacian
-        for i in range(n):
-            for j in range(data.k):
-                x = data.graph[i][j]
-                if i == j:
-                    laplacian[i, j] = 1  # data.degree_mat[i]
-                elif data.adjacency_mat[i, x] == 1:
-                    d = -1 / math.sqrt(data.degree_mat[i] * data.degree_mat[x])
-                    laplacian[i, x] = d
-
-        #eig_val, eig_vect = sparse.linalg.eigs(laplacian, 2, sigma=0, which='LM')
-        eig_val, eig_vec = np.linalg.eig(laplacian.todense())
-
-        print(eig_val.shape)
-
-        min_idx = -1
-        min_val = 100
-        sec_min_idx = -1
-
-        for idx, e in enumerate(eig_val):
-            if e < min_val:
-                sec_min_idx = min_idx
-                min_idx = idx
-                min_val = e
-
-        y = eig_vec[sec_min_idx]
-
-        cluster1 = []
-        cluster2 = []
-
-        for i in range(len(y)):
-            if y[i] >= 0:
-                cluster1.append(i)
-            else:
-                cluster2.append(i)
-
     def normalised_cut(self, data, c):
 
         nodes = [i for i in range(len(data.img_ids))]
         clusters = []
 
-        self._normalised_cut_rec(data, nodes, c, clusters)
+        self._normalised_cut_rec(data, nodes, c, clusters, True)
         return clusters
 
-    def _normalised_cut_rec(self, data, nodes, c, clusters):
+    def _normalised_cut_rec(self, data, nodes, c, clusters, first=False):
+
         if c < 2:
             clusters.append(nodes)
+            return
+        if len(clusters) == c:
             return
 
         n = len(nodes)
 
-        laplacian = sparse.lil_matrix((n, n), dtype=float)
+        if not first:
+            laplacian = sparse.lil_matrix((n, n), dtype=float)
 
-        for m in range(n):
-            i = nodes[m]
-            for j in range(data.k):
-                x = data.graph[i][j]
-                if i == j:
-                    laplacian[i, j] = 1  # data.degree_mat[i]
-                elif data.adjacency_mat[i, x] == 1:
-                    d = -1 / math.sqrt(data.degree_mat[i] * data.degree_mat[x])
-                    laplacian[i, x] = d
+            for i in nodes:
+                e = nodes[i]
+                for j in range(data.k):
+                    x = data.graph[i][j]
+                    if x not in nodes:
+                        continue
+                    f = nodes[x]
+                    if i == x:
+                        laplacian[e, e] = 1  # data.degree_mat[i]
+                    elif data.adjacency_mat[i, x] == 1:
+                        d = -1 / math.sqrt(data.degree_mat[i] * data.degree_mat[x])
+                        laplacian[e, f] = d
 
-        eig_val, eig_vec = np.linalg.eig(laplacian.todense())
+            eig_val, eig_vec = np.linalg.eig(laplacian.todense())
 
-        min_idx = -1
-        min_val = 100
-        sec_min_idx = -1
-        print(eig_val)
-        print(eig_vec)
-        for idx, e in enumerate(eig_val.real):
-            print('idx: '+str(idx)+'  e: '+str(e))
-            if e < min_val:
-                sec_min_idx = min_idx
-                min_idx = idx
-                min_val = e
+            min_idx = -1
+            min_val = 1000
+            sec_min_idx = -1
+            for idx, e in enumerate(eig_val.real):
+                if e < min_val:
+                    sec_min_idx = min_idx
+                    min_idx = idx
+                    min_val = e
 
-        y = eig_vec[sec_min_idx]
-        print(sec_min_idx)
-        print(min_val)
-        print(eig_val[min_idx])
-        print(y.shape)
-        print(y.to_list())
-        print(len(y.to_list()))
-        print(y[0].shape)
-        print(y[0])
-        y = y.real
-        '''
-        cluster1 = []
-        cluster2 = []
-
-        for i in range(len(y)):
-            if y[i] >= 0:
-                cluster1.append(i)
-            else:
-                cluster2.append(i)
-
-        c = c - 2
-
-        if c == 2:
-            clusters.append(cluster1)
-            clusters.append(cluster2)
-        elif c == 3:
-            if len(cluster1) < len(cluster2):
-                clusters.append(cluster1)
-                self._normalised_cut_rec(data, cluster2, c-1, clusters)
-            else:
-                clusters.append(cluster2)
-                self._normalised_cut_rec(data, cluster1, c - 1, clusters)
+            y = eig_vec[sec_min_idx]
         else:
-            if len(cluster1) < len(cluster2):
-                self._normalised_cut_rec(data, cluster1, math.floor(c / 2), clusters)
-                self._normalised_cut_rec(data, cluster2, math.ciel(c / 2), clusters)
+            y = pi.load(open("second_smallest.eig", "rb"))
+        y = y.real
+
+        cluster1 = {}
+        cluster2 = {}
+        cluster1_idx = 0
+        cluster2_idx = 0
+        for i in range(y.shape[1]):
+            if y[0, i] >= 0:
+                cluster1[i] = cluster1_idx
+                cluster1_idx = cluster1_idx + 1
             else:
-                self._normalised_cut_rec(data, cluster2, math.floor(c / 2), clusters)
-                self._normalised_cut_rec(data, cluster1, math.ciel(c / 2), clusters)
-                
-        '''
+                cluster2[i] = cluster2_idx
+                cluster2_idx = cluster2_idx + 1
+
+        clusters.append(cluster1)
+        clusters.append(cluster2)
+
+        largest_cluster_size = 0
+        largest_cluster_idx = -1
+
+        for i in range(len(clusters)):
+            if len(clusters[i]) > largest_cluster_size:
+                largest_cluster_size = len(clusters[i])
+                largest_cluster_idx = i
+
+
+        next_cluster = clusters[largest_cluster_idx]
+        del clusters[largest_cluster_idx]
+        self._normalised_cut_rec(data, next_cluster, c, clusters)

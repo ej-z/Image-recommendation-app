@@ -23,6 +23,8 @@ class Phase3_task2:
 
         for i in clusters:
             pic_info = []
+            print(i)
             for j in i:
-                pic_info.append({'id': j, 'info': ''})
+                print(j)
+                pic_info.append({'id': data.img_ids[j], 'info': ''})
             PA.display_images(pic_info, 'Task 2b - ' + str(c))

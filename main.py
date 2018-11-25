@@ -11,6 +11,7 @@ from sklearn import metrics
 import numpy as np
 from data_loading import DataLoading
 from os import system
+import pickle as pi
 
 from phase3_task1 import Phase3_task1
 from phase3_task2 import Phase3_task2
@@ -54,7 +55,7 @@ def main():
             tasks = Phase3_task2()
             tasks.task_2a(data, int(ips[0]))
         elif option == '2b':
-            print('TASK 2b')
+            print('TASK 2b - Normalised cut partitioning')
             print('e.g: 5')
             inp = input("Input: ")
             ips = inp.split(' ')
@@ -107,13 +108,6 @@ def main():
             ips = inp.split(' ')
             tasks = Phase3_Task_6b()
             tasks.task6b(data, ips[0])
-        elif option == '7':
-            print('TASK 7')
-            print("Sample: 5")
-            inp = input("Input: ")
-            ips = inp.split(' ')
-            tasks = Task_7()
-            tasks.task_7(int(ips[0]))
         elif option == '8':
             print('Load Data')
             path = input("Path: ")
@@ -134,12 +128,4 @@ def main():
         input('Press any key to continue...')
 
 if __name__ == "__main__":
-    #dt = DataLoading('0')
-    #dt.generate_img_img_vis_graph()
-    #p1 = Phase3_task1()
-    #data = p1.task1(5,'vis')
-    #print('done')
-    #p3 = Phase3_task3()
-    #p3.task_3(data, 10)
-    #Test.test()
     main()
