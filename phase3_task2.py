@@ -19,4 +19,10 @@ class Phase3_task2:
     def task_2b(self, data, c):
 
         c_a = Clustering_Algorithms()
-        c_a.clustering_2(data, c)
+        clusters = c_a.normalised_cut(data, c)
+
+        for i in clusters:
+            pic_info = []
+            for j in i:
+                pic_info.append({'id': j, 'info': ''})
+            PA.display_images(pic_info, 'Task 2b - ' + str(c))

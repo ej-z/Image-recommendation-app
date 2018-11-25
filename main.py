@@ -54,7 +54,7 @@ def main():
             tasks = Phase3_task2()
             tasks.task_2a(data, int(ips[0]))
         elif option == '2b':
-            print('TASK 2a ')
+            print('TASK 2b')
             print('e.g: 5')
             inp = input("Input: ")
             ips = inp.split(' ')
