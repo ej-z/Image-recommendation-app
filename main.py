@@ -18,6 +18,7 @@ from phase3_task3 import Phase3_task3
 from phase3_task4 import Phase3_task4
 from phase3_task_5ab import Phase3_Task_5ab
 from phase3_task6a import Phase3_Task_6a
+from phase3_task6b import Phase3_Task_6b
 
 def print_menu():
     print('1. Task 1')
@@ -29,8 +30,7 @@ def print_menu():
     print('5b. Task 5b  RUN 5a before this to build index structure')
     print('6a. Task 6a With k')
     print('6aa Task 6aa without k')
-    print('6. Task 6')
-    print('7. Task 7')
+    print('6b. Task 6b')
     print('8. Load data')
     print('0. Quit')
 
@@ -100,6 +100,13 @@ def main():
             inp = input('Input: <filename>')
             tasks = Phase3_Task_6a()
             tasks.task6a(inp)
+        elif option == '6b':
+            print('6b Task 6b')
+            print('Sample: task6.txt')
+            inp = input('Input: ')
+            ips = inp.split(' ')
+            tasks = Phase3_Task_6b()
+            tasks.task6b(data, ips[0])
         elif option == '7':
             print('TASK 7')
             print("Sample: 5")

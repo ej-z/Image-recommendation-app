@@ -15,4 +15,4 @@ class Phase3_task3:
         for idx, val in result.iteritems():
             pic_info.append({'id': idx, 'info': idx + ' :'+str(val)})
 
-        PA.display_images(pic_info)
+        PA.display_images(pic_info, 'Task 3 - '+str(k))

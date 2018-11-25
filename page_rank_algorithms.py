@@ -12,15 +12,15 @@ class PageRanks:
         M = data.adjacency_mat/data.k
         E = np.zeros((n, n))
 
-        #TODO: presonalization should come into effect here, I think.
         alpha = 0.85
         dp = (1 - alpha) / n
         E[:] = dp
         A = (alpha * M) + E
         old, new = np.zeros((1, n)), np.zeros((1, n))
-        new[0][0] = 1
+        new[:] = 1/n
         iter = 0
-        while iter < 100 and not np.array_equal(old, new):
+
+        while iter < 500 and not np.array_equal(old, new):
             old = new.copy()
             new = np.matmul(new, A)
             iter = iter + 1
@@ -42,7 +42,7 @@ class PageRanks:
 
         return M
 
-    def personalized_page_rank(self, data, query_imgs):
+    def personalized_page_rank(self, data, query_imgs, sort = True):
 
         n = len(data.img_ids)
 
@@ -59,7 +59,7 @@ class PageRanks:
         new = V
         A = R.todense()
         iter = 0
-        while iter < 100 and not np.array_equal(old, new):
+        while iter < 500 and not np.array_equal(old, new):
             old = new.copy()
             new = ((1-alpha) * np.matmul(new, A)) + (alpha * V)
             iter = iter + 1
@@ -67,4 +67,7 @@ class PageRanks:
         for i in range(n):
             final_ranks[i] = new[0, i]
         l_s = pd.Series(final_ranks, index=data.img_ids)
+
+        if not sort:
+            return l_s
         return pd.Series.sort_values(l_s, ascending=False)

@@ -19,13 +19,13 @@ class Clustering_Algorithms:
 
         # Symmetric normalized Laplacian
         for i in range(n):
-            for j in range(i, n):
+            for j in range(data.k):
+                x = data.graph[i][j]
                 if i == j:
-                    laplacian[i, j] = data.degree_mat[i]
-                elif data.adjacency_mat[i, j] == 1:
-                    d = -1/math.sqrt(data.degree_mat[i] * data.degree_mat[j])
-                    laplacian[i, j] = -1
-                    laplacian[j, i] = -1
+                    laplacian[i, j] = 1 #data.degree_mat[i]
+                elif data.adjacency_mat[i, x] == 1:
+                    d = -1/math.sqrt(data.degree_mat[i] * data.degree_mat[x])
+                    laplacian[i, x] = d
 
         eig_val, eig_vect = sparse.linalg.eigs(laplacian, c)
         X = eig_vect.real
