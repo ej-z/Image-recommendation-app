@@ -15,6 +15,7 @@ from os import system
 from phase3_task1 import Phase3_task1
 from phase3_task2 import Phase3_task2
 from phase3_task3 import Phase3_task3
+from phase3_task4 import Phase3_task4
 from phase3_task_5ab import Phase3_Task_5ab
 from phase3_task6a import Phase3_Task_6a
 
@@ -61,11 +62,11 @@ def main():
             tasks.task_3(data, int(ips[0]))
         elif option == '4':
             print('TASK 4')
-            print('Sample: CM PCA 5 1')
+            print('Sample: 10')
             inp = input("Input: ")
             ips = inp.split(' ')
-            tasks = Task_3_4()
-            tasks.task4('locations', ips[0], ips[1], int(ips[2]), ips[3])
+            tasks = Phase3_task4()
+            tasks.task_4(data, int(ips[0]))
         elif option == '5a':
             print('TASK 5a')
             print("Sample: 5 7")
