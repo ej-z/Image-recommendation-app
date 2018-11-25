@@ -80,7 +80,7 @@ class Phase3_Task_6a:
         self.process_distances(labelled_dict)
         total = 0
         for key in self.cluster_dict:
-            pic_info = [{'id': str(int(id)), 'info': str(int(id))} for id in self.cluster_dict[key]]
+            pic_info = [{'id': str(int(id)), 'info': str(int(id))+"  "+key} for id in self.cluster_dict[key]]
             PA.display_images(pic_info)
             #print(pic_info)
             print("cluster name=", key)
