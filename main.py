@@ -1,17 +1,4 @@
-from pymongo import MongoClient
-from task_1_2 import Task_1_2
-from task_3_4 import Task_3_4
-from task_5 import Task_5
-from task_6 import Task_6
-from task_7 import Task_7
-import collections
-import math
-from scipy import spatial
-from sklearn import metrics
-import numpy as np
 from data_loading import DataLoading
-from os import system
-import pickle as pi
 
 from phase3_task1 import Phase3_task1
 from phase3_task2 import Phase3_task2

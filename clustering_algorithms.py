@@ -1,11 +1,9 @@
 from scipy import sparse
-from scipy import linalg
 import numpy as np
 import math
 from sklearn.cluster import KMeans
 import copy
 import pickle as pi
-import os
 
 class Clustering_Algorithms:
 
@@ -121,15 +119,20 @@ class Clustering_Algorithms:
                     laplacian[e, f] = d
 
         eig_val, eig_vec = np.linalg.eig(laplacian.todense())
-
+        pi.dump(eig_val, open('kpl.p', 'wb'))
         min_idx = -1
         min_val = 1000
         sec_min_idx = -1
+        sec_min_val = 1000
         for idx, e in enumerate(eig_val.real):
             if e < min_val:
                 sec_min_idx = min_idx
+                sec_min_val = min_val
                 min_idx = idx
                 min_val = e
+            elif e < sec_min_val:
+                sec_min_val = e
+                sec_min_idx = idx
 
         y = eig_vec[sec_min_idx]
         y = y.real
