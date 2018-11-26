@@ -98,6 +98,9 @@ class Clustering_Algorithms:
         if c < 2:
             clusters.append(nodes)
             return
+        if len(clusters) == c-1:
+            clusters.append(nodes)
+            return
         if len(clusters) == c:
             return
 
@@ -105,21 +108,20 @@ class Clustering_Algorithms:
 
         laplacian = sparse.lil_matrix((n, n), dtype=float)
 
-        for i in nodes:
+        for i in range(len(nodes)):
             e = nodes[i]
             for j in range(data.k):
-                x = data.graph[i][j]
+                x = data.graph[e][j]
                 if x not in nodes:
                     continue
-                f = nodes[x]
-                if i == x:
-                    laplacian[e, e] = 1  # data.degree_mat[i]
-                elif data.adjacency_mat[i, x] == 1:
-                    d = -1 / math.sqrt(data.degree_mat[i] * data.degree_mat[x])
-                    laplacian[e, f] = d
+                f = nodes.index(x)
+                if e == x:
+                    laplacian[i, i] = 1  # data.degree_mat[i]
+                elif data.adjacency_mat[e, x] == 1:
+                    d = -1 / math.sqrt(data.degree_mat[e] * data.degree_mat[x])
+                    laplacian[i, f] = d
 
         eig_val, eig_vec = np.linalg.eig(laplacian.todense())
-        pi.dump(eig_val, open('kpl.p', 'wb'))
         min_idx = -1
         min_val = 1000
         sec_min_idx = -1
@@ -137,17 +139,13 @@ class Clustering_Algorithms:
         y = eig_vec[sec_min_idx]
         y = y.real
 
-        cluster1 = {}
-        cluster2 = {}
-        cluster1_idx = 0
-        cluster2_idx = 0
+        cluster1 = []
+        cluster2 = []
         for i in range(y.shape[1]):
             if y[0, i] >= 0:
-                cluster1[i] = cluster1_idx
-                cluster1_idx = cluster1_idx + 1
+                cluster1.append(nodes[i])
             else:
-                cluster2[i] = cluster2_idx
-                cluster2_idx = cluster2_idx + 1
+                cluster2.append(nodes[i])
 
         clusters.append(cluster1)
         clusters.append(cluster2)
