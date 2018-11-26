@@ -92,10 +92,10 @@ class Clustering_Algorithms:
         nodes = [i for i in range(len(data.img_ids))]
         clusters = []
 
-        self._normalised_cut_rec(data, nodes, c, clusters, True)
+        self._normalised_cut_rec(data, nodes, c, clusters)
         return clusters
 
-    def _normalised_cut_rec(self, data, nodes, c, clusters, first=False):
+    def _normalised_cut_rec(self, data, nodes, c, clusters):
 
         if c < 2:
             clusters.append(nodes)
@@ -105,36 +105,33 @@ class Clustering_Algorithms:
 
         n = len(nodes)
 
-        if not first:
-            laplacian = sparse.lil_matrix((n, n), dtype=float)
+        laplacian = sparse.lil_matrix((n, n), dtype=float)
 
-            for i in nodes:
-                e = nodes[i]
-                for j in range(data.k):
-                    x = data.graph[i][j]
-                    if x not in nodes:
-                        continue
-                    f = nodes[x]
-                    if i == x:
-                        laplacian[e, e] = 1  # data.degree_mat[i]
-                    elif data.adjacency_mat[i, x] == 1:
-                        d = -1 / math.sqrt(data.degree_mat[i] * data.degree_mat[x])
-                        laplacian[e, f] = d
+        for i in nodes:
+            e = nodes[i]
+            for j in range(data.k):
+                x = data.graph[i][j]
+                if x not in nodes:
+                    continue
+                f = nodes[x]
+                if i == x:
+                    laplacian[e, e] = 1  # data.degree_mat[i]
+                elif data.adjacency_mat[i, x] == 1:
+                    d = -1 / math.sqrt(data.degree_mat[i] * data.degree_mat[x])
+                    laplacian[e, f] = d
 
-            eig_val, eig_vec = np.linalg.eig(laplacian.todense())
+        eig_val, eig_vec = np.linalg.eig(laplacian.todense())
 
-            min_idx = -1
-            min_val = 1000
-            sec_min_idx = -1
-            for idx, e in enumerate(eig_val.real):
-                if e < min_val:
-                    sec_min_idx = min_idx
-                    min_idx = idx
-                    min_val = e
+        min_idx = -1
+        min_val = 1000
+        sec_min_idx = -1
+        for idx, e in enumerate(eig_val.real):
+            if e < min_val:
+                sec_min_idx = min_idx
+                min_idx = idx
+                min_val = e
 
-            y = eig_vec[sec_min_idx]
-        else:
-            y = pi.load(open("second_smallest.eig", "rb"))
+        y = eig_vec[sec_min_idx]
         y = y.real
 
         cluster1 = {}

@@ -237,11 +237,9 @@ class DataLoading:
             data.extend(images)
 
         data = np.asarray(data)
-        print('data shape', data.shape)
         pca = Decomposition(data, 400, 'PCA', [], scale=True)
         euc_distances = euclidean_distances(pca.decomposed_data, pca.decomposed_data)
         euc_distances = np.asarray(euc_distances)
-        print('distance matrix shape', euc_distances.shape)
 
         img_img_tb = 'image_image_vis'
         img_id_tb = 'image_id_vis'
