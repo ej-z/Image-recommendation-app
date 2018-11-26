@@ -30,4 +30,4 @@ class Img_Img_Data:
                 self.adjacency_mat[i, x] = 1
                 self.degree_mat[x] = self.degree_mat[x] + 1
 
-        #self.print_graph(ids, g, k)
+        self.print_graph(ids, g, k)
